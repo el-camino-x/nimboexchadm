@@ -6,47 +6,79 @@
 <title>NIMBO EXCHANGE - Home</title>
 <link rel="stylesheet" href="style.css">
 <style>
+  body {
+    font-family: Arial, sans-serif;
+    background: #111;
+    color: white;
+    margin: 0;
+    padding: 0;
+  }
+
   .home-container {
     text-align: center;
-    margin-top: 50px;
+    margin: 50px auto;
+    max-width: 900px;
+    padding: 0 20px;
   }
+
   .home-container h1 {
-    margin-bottom: 20px;
+    margin-bottom: 10px;
   }
+
+  .logo-img {
+    max-width: 250px;
+    border-radius: 15px;
+    margin-bottom: 20px;
+    cursor: pointer;
+    transition: 0.2s;
+  }
+  .logo-img:hover {
+    transform: scale(1.05);
+  }
+
   .home-buttons {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 15px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
     margin-top: 30px;
   }
+
   .home-buttons button {
-    padding: 15px 25px;
+    padding: 20px 10px;
     font-size: 16px;
     border: none;
-    border-radius: 8px;
+    border-radius: 10px;
     cursor: pointer;
     background: #ffd700;
     color: black;
-    transition: 0.2s;
     display: flex;
     align-items: center;
-    gap: 8px;
+    justify-content: center;
+    gap: 10px;
+    transition: 0.2s;
+    font-weight: bold;
   }
+
   .home-buttons button:hover {
     background: #d6b500;
   }
-  .logo-img {
-    max-width: 200px;
-    border-radius: 15px;
+
+  p {
+    margin-top: 0;
     margin-bottom: 20px;
+    font-size: 16px;
   }
 </style>
 </head>
 <body>
 
 <div class="home-container">
-  <img src="https://i.postimg.cc/2SXZKpvQ/Desain-tanpa-judul-(8)-Photoroom.png" alt="Logo Nimbo Exchange" class="logo-img">
+  <!-- Logo klikable -->
+  <img src="https://i.postimg.cc/2SXZKpvQ/Desain-tanpa-judul-(8)-Photoroom.png" 
+       alt="Logo Nimbo Exchange" 
+       class="logo-img"
+       onclick="location.href='index.html'">
+
   <h1>Selamat Datang di NIMBO EXCHANGE</h1>
   <p>Pilih menu yang ingin diakses:</p>
 
