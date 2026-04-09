@@ -2,11 +2,12 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>NIMBO EXCHANGE - Home</title>
 <link rel="icon" href="https://i.postimg.cc/NM2wYX5f/image-Photoroom.png" type="image/png">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
+
 body, html {
   margin: 0;
   padding: 0;
@@ -25,6 +26,7 @@ body, html {
   z-index: -1; 
 }
 
+
 .overlay {
   position: fixed;
   top:0; left:0;
@@ -42,6 +44,17 @@ body, html {
   margin: 60px auto;
   padding: 0 20px;
   color: #fff;
+
+  opacity: 0;
+  transform: translateY(30px);
+  animation: fadeUp 1s ease forwards;
+}
+
+@keyframes fadeUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .logo-img {
@@ -70,16 +83,17 @@ p {
 }
 
 .home-buttons {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 30px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 25px;
+  justify-items: center;
 }
 
 .home-buttons button {
-  width: 280px;
+  width: 100%;
+  max-width: 280px;
   height: 90px;
-  background: linear-gradient(145deg, #ffd700, #d6b500);
+  background: linear-gradient(145deg, #FFD700, #FF69B4);
   border: none;
   border-radius: 15px;
   font-size: 1.1rem;
@@ -101,10 +115,20 @@ p {
 
 .home-buttons button:hover {
   transform: translateY(-5px) scale(1.03);
-  background: linear-gradient(145deg, #fff176, #ffd700);
+  background: linear-gradient(145deg, #FFE066, #FF85C1);
   box-shadow: 0 14px 30px rgba(0,0,0,0.6);
   color: #222;
   text-shadow: 1px 1px 4px rgba(0,0,0,0.6);
+}
+
+.footer {
+  position: fixed;
+  bottom: 10px;
+  width: 100%;
+  text-align: center;
+  color: #aaa;
+  font-size: 0.8rem;
+  opacity: 0.7;
 }
 
 @media(max-width:600px){
@@ -112,6 +136,26 @@ p {
   .home-buttons { gap: 20px; }
   .home-buttons button { width: 230px; height: 75px; font-size: 1rem; }
 }
+
+.home-buttons button.ready {
+  background: linear-gradient(145deg, #FFD700, #FF69B4);
+  color: #111;
+  cursor: pointer;
+}
+
+/* Tombol coming soon */
+.home-buttons button.coming {
+  background: linear-gradient(145deg, #bbb, #eee);
+  color: #666;
+  cursor: default;
+  filter: grayscale(20%);
+}
+
+.home-buttons button.coming:hover {
+  transform: none; /* hover biasa ga aktif */
+  box-shadow: none;
+}
+
 </style>
 </head>
 <body>
@@ -129,26 +173,30 @@ p {
        class="logo-img"
        onclick="location.href='index.html'">
 
-  <h1>Selamat Datang di NIMBO EXCHANGE</h1>
+  <h1>NIMBO EXCHANGE PANEL</h1>
   <p>Pilih menu yang ingin diakses:</p>
 
-  <div class="home-buttons">
-    <button onclick="location.href='form.html'">💰 FORM SALES</button>
-    <button onclick="comingSoon()">⌛ COMING SOON</button> <!-- 📋 FORM CASBON -->
-    <button onclick="location.href='salesH.html'">📊 HISTORY SALES TRANSACTION</button>
-    <button onclick="comingSoon()">⌛ COMING SOON</button> <!-- 🧾 HISTORY CASBON TRANSACTION -->
-    <button onclick="comingSoon()">⌛ COMING SOON</button> <!-- 📈 MONTHLY PROFIT -->
-    <button onclick="comingSoon()">⌛ COMING SOON</button> <!-- 🏦 BALANCE BANK -->
-    <button onclick="comingSoon()">⌛ COMING SOON</button> <!-- 👥 CUSTOMER LISTING -->
-    <button onclick="window.open('https://tinyurl.com/nimboexch', '_blank')">🌐 NIMBO EXCHANGE WEBSITE</button>
-  </div>
+<div class="home-buttons">
+  <button class="ready" onclick="location.href='form.html'">💰 FORM SALES</button>
+  <button class="coming" onclick="comingSoon()">📋 FORM CASBON</button>
+  <button class="ready" onclick="location.href='salesH.html'">📊 HISTORY SALES</button>
+  <button class="coming" onclick="comingSoon()">🧾 HISTORY CASBON</button>
+  <button class="coming" onclick="comingSoon()">📈 MONTHLY PROFIT</button>
+  <button class="coming" onclick="comingSoon()">🏦 BALANCE BANK</button>
+  <button class="coming" onclick="comingSoon()">👥 CUSTOMER LISTING</button>
+  <button class="ready" onclick="window.open('https://tinyurl.com/nimboexch', '_blank')">🌐 WEBSITE</button>
 </div>
+
 
 <script>
 function comingSoon() {
-  alert("Coming Soon 😎");
+  alert("Coming Soon");
 }
 </script>
 
 </body>
+<footer class="footer">
+  © 2026 NIMBO EXCHANGE
+</footer>
+
 </html>
