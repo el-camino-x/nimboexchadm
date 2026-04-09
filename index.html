@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NIMBO EXCHANGE - Home</title>
+<link rel="stylesheet" href="style.css">
+<style>
+  .home-container {
+    text-align: center;
+    margin-top: 50px;
+  }
+  .home-container h1 {
+    margin-bottom: 20px;
+  }
+  .home-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 30px;
+  }
+  .home-buttons button {
+    padding: 15px 25px;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    background: #ffd700;
+    color: black;
+    transition: 0.2s;
+  }
+  .home-buttons button:hover {
+    background: #d6b500;
+  }
+  .logo-img {
+    max-width: 200px;
+    border-radius: 15px;
+    margin-bottom: 20px;
+  }
+</style>
+</head>
+<body>
+
+<div class="home-container">
+  <img src="https://i.postimg.cc/2SXZKpvQ/Desain-tanpa-judul-(8)-Photoroom.png" alt="Logo Nimbo Exchange" class="logo-img">
+  <h1>Selamat Datang di NIMBO EXCHANGE</h1>
+  <p>Pilih menu yang ingin diakses:</p>
+
+  <div class="home-buttons">
+    <button onclick="location.href='form.html'">FORM SALES</button>
+    <button onclick="comingSoon()">FORM CASBON</button>
+    <button onclick="comingSoon()">HISTORY SALES TRANSACTION</button>
+    <button onclick="comingSoon()">HISTORY CASBON TRANSACTION</button>
+    <button onclick="comingSoon()">MONTHLY PROFIT</button>
+    <button onclick="comingSoon()">BALANCE BANK</button>
+    <button onclick="comingSoon()">CUSTOMER LISTING</button>
+  </div>
+</div>
+
+<script>
+function comingSoon() {
+  alert("Coming Soon 😎");
+}
+</script>
+
+</body>
+</html>
