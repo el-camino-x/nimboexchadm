@@ -5,6 +5,47 @@ body {
   margin: 0; padding: 0;
 }
 
+.header-nav {
+  display: flex;
+  justify-content: space-between; 
+  align-items: center;
+  background: #222;
+  padding: 10px 20px;
+  border-bottom: 2px solid #ffd700;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.header-nav .logo img {
+  height: 50px;   
+  width: auto;
+  border-radius: 10px;
+}
+
+.nav-list {
+  list-style: none;
+  display: flex;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-list li a {
+  text-decoration: none;
+  color: white;
+  font-weight: bold;
+  padding: 5px 10px;
+  transition: 0.3s;
+}
+
+.nav-list li a:hover {
+  background: #ffd700;
+  color: black;
+  border-radius: 5px;
+}
+
+
+
 .container {
   max-width: 900px;
   margin: auto;
