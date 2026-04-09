@@ -143,7 +143,6 @@ p {
   cursor: pointer;
 }
 
-/* Tombol coming soon */
 .home-buttons button.coming {
   background: linear-gradient(145deg, #bbb, #eee);
   color: #666;
@@ -152,8 +151,40 @@ p {
 }
 
 .home-buttons button.coming:hover {
-  transform: none; /* hover biasa ga aktif */
+  transform: none;
   box-shadow: none;
+}
+
+.running-text {
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  box-sizing: border-box;
+  border-top: 1px solid rgba(255,255,255,0.2); 
+  border-bottom: 1px solid rgba(255,255,255,0.2); 
+  margin: 15px 0;
+}
+
+.running-text span {
+  display: inline-block;
+  padding-left: 100%;
+  animation: scrollText 15s linear infinite;
+  font-size: 1.2rem;
+  font-weight: 700;
+
+  background: linear-gradient(90deg, #FFD700, #FF69B4, #FFA500);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  text-shadow:
+    0 0 3px #FFD700,
+    0 0 6px #FF69B4,
+    0 0 9px #FFA500;
+}
+
+@keyframes scrollText {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-100%); }
 }
 
 </style>
@@ -173,6 +204,11 @@ p {
        class="logo-img"
        onclick="location.href='index.html'">
 
+<div class="running-text">
+  <span>💰 REZEKI GA KEMANA, TAPI KALAU GA JUALAN YA GA DAPET 💰</span>
+</div>
+
+
   <h1>NIMBO EXCHANGE PANEL</h1>
   <p>Pilih menu yang ingin diakses:</p>
 
@@ -181,8 +217,8 @@ p {
   <button class="coming" onclick="comingSoon()">📋 FORM CASBON</button>
   <button class="ready" onclick="location.href='salesH.html'">📊 HISTORY SALES</button>
   <button class="coming" onclick="comingSoon()">🧾 HISTORY CASBON</button>
-  <button class="coming" onclick="comingSoon()">📈 MONTHLY PROFIT</button>
   <button class="coming" onclick="comingSoon()">🏦 BALANCE BANK</button>
+  <button class="coming" onclick="comingSoon()">📈 MONTHLY PROFIT</button>
   <button class="coming" onclick="comingSoon()">👥 CUSTOMER LISTING</button>
   <button class="ready" onclick="window.open('https://tinyurl.com/nimboexch', '_blank')">🌐 WEBSITE</button>
 </div>
