@@ -11,7 +11,6 @@ const submitBtn = document.getElementById("submit-btn");
 let selectedAgent = "";
 let selectedCurrency = "";
 
-// Agent button click
 const agentBtns = document.querySelectorAll(".agent-btn");
 agentBtns.forEach(btn => {
   btn.addEventListener("click", () => {
@@ -21,7 +20,6 @@ agentBtns.forEach(btn => {
   });
 });
 
-// Currency button click
 const currencyBtns = document.querySelectorAll(".currency-btn");
 currencyBtns.forEach(btn => {
   btn.addEventListener("click", () => {
@@ -31,12 +29,10 @@ currencyBtns.forEach(btn => {
   });
 });
 
-// Validasi nama hanya huruf & spasi
 namaInput.addEventListener("input", () => {
   namaInput.value = namaInput.value.replace(/[^a-zA-Z\s]/g, "");
 });
 
-// Validasi angka
 [rateInput, usdInput, modalInput].forEach(inp => {
   inp.addEventListener("input", () => {
     inp.value = inp.value.replace(/[^0-9]/g, "");
@@ -44,17 +40,14 @@ namaInput.addEventListener("input", () => {
   });
 });
 
-// Format Rupiah
 function formatRupiah(angka) {
   return "Rp " + Number(angka).toLocaleString("id-ID");
 }
 
-// Format Dollar
 function formatDollar(angka) {
   return "$" + Number(angka).toLocaleString("en-US", { minimumFractionDigits: 2 });
 }
 
-// Hitung Total Rupiah & Profit
 function hitungRupiahProfit() {
   const rate = Number(rateInput.value) || 0;
   const totalDollar = Number(usdInput.value) || 0;
@@ -67,12 +60,8 @@ function hitungRupiahProfit() {
   profitInput.value = formatRupiah(profit);
 }
 
-// ======================
-// Endpoint Google Apps Script
-// ======================
 const SHEET_URL = "https://script.google.com/macros/s/AKfycbzORBPb6gqDSe2iwXjYGYU9BIGIELSFy-yM9srjvv0n8CnzHTkKLgvBKveq2N2dMIqx1Q/exec";
 
-// Load Pending Form dari Sheet
 async function loadPendingForms() {
   try {
     const res = await fetch(SHEET_URL + "?action=getAll");
@@ -83,12 +72,8 @@ async function loadPendingForms() {
   }
 }
 
-// Jalankan waktu page load
 document.addEventListener("DOMContentLoaded", loadPendingForms);
 
-// ======================
-// Submit
-// ======================
 form.addEventListener("submit", async e => {
   e.preventDefault();
   if (!selectedAgent || !selectedCurrency) {
@@ -111,13 +96,11 @@ form.addEventListener("submit", async e => {
   };
 
   try {
-    // Kirim ke Apps Script
     await fetch(SHEET_URL + "?" + new URLSearchParams(data), {
       method: "POST",
       mode: "no-cors"
     });
 
-    // Update tabel di page
     addToDashboard({
       TANGGAL: data.tanggal,
       JAM: data.jam,
@@ -146,22 +129,21 @@ form.addEventListener("submit", async e => {
   }
 });
 
-// ======================
-// Tambah ke tabel Pending Form
-// ======================
 function addToDashboard(d) {
   const tr = document.createElement("tr");
   tr.innerHTML = `
-    <td>${d.TANGGAL}</td>
-    <td>${d.JAM}</td>
+    <td>${formatTanggal(d.TANGGAL)}</td>
     <td>${d.NAMA}</td>
     <td>${formatRupiah(d.RATE)}</td>
     <td>${formatDollar(d["TOTAL DOLLAR"])}</td>
-    <td>${d.AGENT}</td>
     <td>${formatRupiah(d["TOTAL RUPIAH"])}</td>
-    <td>${d.CURRENCY}</td>
-    <td>${formatRupiah(d.MODAL)}</td>
-    <td>${formatRupiah(d.PROFIT)}</td>
   `;
   dashboardBody.appendChild(tr);
+}
+
+function formatTanggal(tanggal) {
+  if (!tanggal) return "-"; 
+  const d = new Date(tanggal);
+  if (isNaN(d)) return tanggal; 
+  return d.toLocaleDateString("id-ID");
 }
