@@ -4,82 +4,113 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>NIMBO EXCHANGE - Home</title>
+<link rel="icon" type="image/png" href="https://i.postimg.cc/2SXZKpvQ/Desain-tanpa-judul-(8)-Photoroom.png">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
-body {
-  font-family: 'Poppins', sans-serif;
+/* Reset */
+body, html {
   margin: 0;
   padding: 0;
-  background: linear-gradient(135deg, #0a0a0a, #1a1a1a);
-  color: #fff;
+  height: 100%;
+  font-family: 'Poppins', sans-serif;
+  overflow-x: hidden;
 }
 
+/* Video background */
+.video-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1; /* di belakang konten */
+}
+
+/* Overlay untuk kontras teks */
+.overlay {
+  position: fixed;
+  top:0; left:0;
+  width:100%;
+  height:100%;
+  background: rgba(0,0,0,0.6); /* semi gelap supaya teks terlihat */
+  z-index: 0;
+}
+
+/* Container konten */
 .home-container {
+  position: relative;
+  z-index: 1;
   text-align: center;
   max-width: 1000px;
   margin: 60px auto;
   padding: 0 20px;
+  color: #fff;
 }
 
 /* Logo */
 .logo-img {
-  max-width: 200px;
-  border-radius: 20px;
-  box-shadow: 0 5px 20px rgba(255, 215, 0, 0.3);
+  max-width: 350px;
   cursor: pointer;
+  margin-bottom: 30px;
   transition: transform 0.3s, box-shadow 0.3s;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.5);
 }
 .logo-img:hover {
-  transform: scale(1.1);
-  box-shadow: 0 12px 30px rgba(255, 215, 0, 0.6);
+  transform: scale(1.05);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.7);
 }
 
-/* Title & subtitle */
+/* Judul */
 h1 {
-  font-size: 2.8rem;
+  font-size: 3rem;
   font-weight: 700;
   margin: 25px 0 10px;
   text-shadow: 2px 2px 8px rgba(0,0,0,0.6);
 }
 
+/* Subtitle */
 p {
   font-size: 1.1rem;
   color: #ccc;
   margin-bottom: 40px;
 }
 
-/* Buttons grid */
+/* Tombol grid */
 .home-buttons {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 25px;
-  justify-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 30px;
 }
 
-/* Buttons style */
 .home-buttons button {
+  width: 280px;
+  height: 90px;
   background: linear-gradient(145deg, #ffd700, #d6b500);
   border: none;
   border-radius: 15px;
-  padding: 18px 25px;
-  font-size: 1.05rem;
+  font-size: 1.1rem;
   font-weight: 600;
   color: #111;
   cursor: pointer;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.4);
   transition: all 0.3s ease;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 12px;
+  text-align: center;
+  padding: 10px;
+  overflow: hidden;
   text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+  line-height: 1.2;
+  word-wrap: break-word;
 }
 
-/* Hover effect */
 .home-buttons button:hover {
-  transform: translateY(-5px) scale(1.05);
+  transform: translateY(-5px) scale(1.03);
   background: linear-gradient(145deg, #fff176, #ffd700);
-  box-shadow: 0 12px 25px rgba(0,0,0,0.6);
+  box-shadow: 0 14px 30px rgba(0,0,0,0.6);
   color: #222;
   text-shadow: 1px 1px 4px rgba(0,0,0,0.6);
 }
@@ -87,15 +118,25 @@ p {
 /* Responsive */
 @media(max-width:600px){
   h1 { font-size: 2rem; }
-  .home-buttons { gap: 18px; }
-  .home-buttons button { font-size: 0.95rem; padding: 15px 20px; }
+  .home-buttons { gap: 20px; }
+  .home-buttons button { width: 230px; height: 75px; font-size: 1rem; }
 }
 </style>
 </head>
 <body>
 
+<!-- Video Background -->
+<video class="video-bg" autoplay muted loop>
+  <source src="https://cdn.pixabay.com/video/2019/12/09/30016-378309079_large.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
+
+<!-- Overlay -->
+<div class="overlay"></div>
+
+<!-- Konten -->
 <div class="home-container">
-  <img src="https://i.postimg.cc/2SXZKpvQ/Desain-tanpa-judul-(8)-Photoroom.png" 
+  <img src="https://i.postimg.cc/Mpky0b4q/Desain-tanpa-judul-Photoroom.png" 
        alt="Logo Nimbo Exchange" 
        class="logo-img"
        onclick="location.href='index.html'">
