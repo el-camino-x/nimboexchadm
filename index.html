@@ -3,30 +3,73 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pencatatan Transaksi Dollar</title>
+<title>NIMBO EXCHANGE FORM</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <div class="container">
-  <h2>PENCATATAN TRANSAKSI</h2>
 
-  <input id="nama" placeholder="Nama (contoh: KAEL)"><br>
-  <input id="rate" type="number" placeholder="Rate (contoh: 17000)"><br>
-  <input id="usd" type="number" placeholder="Total Dollar (contoh: 100)"><br>
-  <input id="modal" type="number" placeholder="Modal (contoh: 16900)"><br>
+  <img src="https://i.postimg.cc/2SXZKpvQ/Desain-tanpa-judul-(8)-Photoroom.png" alt="Logo" class="logo-img">
 
-  <select id="agent">
-    <option value="NICKY">NICKY</option>
-    <option value="MAUDY">MAUDY</option>
-  </select><br>
+  <h1>NIMBO EXCHANGE FORM TRANSACTION</h1>
 
-  <select id="currency">
-    <option value="USD">USD</option>
-    <option value="RIEL">RIEL</option>
-  </select><br>
+  <form id="transaksi-form">
 
-  <button id="submitBtn">SIMPAN</button>
+    <label>Nama</label>
+    <input type="text" id="nama" placeholder="-" required>
+
+    <label>Rate (Rp)</label>
+    <input type="text" id="rate" placeholder="-" required>
+
+    <label>Total Dollar ($)</label>
+    <input type="text" id="usd" placeholder="-" required>
+
+    <label>Agent</label>
+    <div class="btn-group">
+      <button type="button" class="agent-btn" data-agent="NICKY">NICKY</button>
+      <button type="button" class="agent-btn" data-agent="MAUDY">MAUDY</button>
+    </div>
+
+    <label>Total Rupiah</label>
+    <input type="text" id="total-rupiah" readonly>
+
+    <label>Currency</label>
+    <div class="btn-group">
+      <button type="button" class="currency-btn" data-currency="USD">$ USD</button>
+      <button type="button" class="currency-btn" data-currency="RIEL">៛ RIEL</button>
+    </div>
+
+    <label>Modal (Rp)</label>
+    <input type="text" id="modal" placeholder="-" required>
+
+    <label>Profit</label>
+    <input type="text" id="profit" readonly>
+
+    <button type="submit" id="submit-btn">Kirim</button>
+  </form>
+
+  <h2>Pending Form</h2>
+  <table id="dashboard">
+    <thead>
+      <tr>
+        <th>Tanggal</th>
+        <th>Jam</th>
+        <th>Nama</th>
+        <th>Rate</th>
+        <th>Total $</th>
+        <th>Agent</th>
+        <th>Total Rp</th>
+        <th>Currency</th>
+        <th>Modal</th>
+        <th>Profit</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Data akan muncul di sini -->
+    </tbody>
+  </table>
+
 </div>
 
 <script src="script.js"></script>
