@@ -80,7 +80,7 @@ tbody td:nth-child(4) {
   position: relative;
   z-index: 1;
   max-width: 1200px;
-  margin: 120px auto 50px auto;
+  margin: 10px auto 50px auto;
   padding: 0 20px;
   overflow-x: auto;
 }
@@ -92,18 +92,46 @@ h1 {
   text-shadow: 2px 2px 8px rgba(0,0,0,0.6);
 }
 
+/* FILTER VERTIKAL */
 .filter-group {
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 15px;
   margin-bottom: 20px;
 }
-.filter-group input,
-.filter-group select {
-  padding: 6px 10px;
-  margin: 0 5px 10px 5px;
+
+.filter-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.filter-item label {
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.filter-item input,
+.filter-item select,
+.filter-item button {
+  padding: 8px 12px;
   border-radius: 5px;
   border: none;
   outline: none;
   font-size: 0.95rem;
+  width: 220px;
+}
+
+.filter-item button {
+  background: #ffd700;
+  color: black;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.filter-item button:hover {
+  background: #e6c200;
 }
 
 table {
@@ -129,12 +157,6 @@ tr:hover { background: rgba(255,255,255,0.2); }
 
 @media(max-width:1200px){
   table { font-size: 0.9rem; }
-}
-@media(max-width:600px){
-  h1 { font-size: 2rem; margin-top: 100px; }
-  .filter-group input,
-  .filter-group select { width: 90%; margin-bottom: 10px; }
-  th, td { font-size: 0.8rem; padding: 8px; }
 }
 </style>
 </head>
@@ -163,12 +185,28 @@ tr:hover { background: rgba(255,255,255,0.2); }
 <div class="container">
   <h1>Nimbo History Sales Transaction</h1>
 
+  <!-- FILTER VERTIKAL -->
   <div class="filter-group">
-    <input type="text" id="filter-nama" placeholder="Filter Nama...">
-    <select id="filter-agent">
-      <option value="">Filter Agent...</option>
-    </select>
-    <input type="date" id="filter-tanggal">
+    <div class="filter-item">
+      <label for="filter-nama">Filter Nama</label>
+      <input type="text" id="filter-nama" placeholder="Masukkan nama...">
+    </div>
+
+    <div class="filter-item">
+      <label for="filter-agent">Filter Agent</label>
+      <select id="filter-agent">
+        <option value="">Pilih Agent...</option>
+      </select>
+    </div>
+
+    <div class="filter-item">
+      <label for="filter-tanggal">Filter Tanggal</label>
+      <input type="date" id="filter-tanggal">
+    </div>
+
+    <div class="filter-item">
+      <button id="reset-filter">Reset Filter</button>
+    </div>
   </div>
 
   <table>
@@ -270,6 +308,14 @@ function filterData() {
 
   renderTable(filtered);
 }
+
+// RESET FILTER
+document.getElementById('reset-filter').addEventListener('click', () => {
+  document.getElementById('filter-nama').value = '';
+  document.getElementById('filter-agent').value = '';
+  document.getElementById('filter-tanggal').value = '';
+  renderTable(allData);
+});
 </script>
 
 </body>
