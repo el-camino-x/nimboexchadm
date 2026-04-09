@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Balance Bank</title>
+<link rel="icon" href="https://i.postimg.cc/NM2wYX5f/image-Photoroom.png" type="image/png">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  
+body, html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: 'Poppins', sans-serif;
+  overflow-x: hidden;
+}
+
+.video-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1; 
+}
+
+
+.overlay {
+  position: fixed;
+  top:0; left:0;
+  width:100%;
+  height:100%;
+  background: rgba(0,0,0,0.6);
+  z-index: 0;
+}
+
+.header-nav {
+  display: flex;
+  justify-content: space-between; 
+  align-items: center;
+  background: #222;
+  padding: 10px 20px;
+  border-bottom: 2px solid #ffd700;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.header-nav .logo img {
+  height: 50px;   
+  width: auto;
+  border-radius: 10px;
+}
+.nav-list {
+  list-style: none;
+  display: flex;
+  margin: 0;
+  padding: 0;
+}
+.nav-list li a {
+  text-decoration: none;
+  color: white;
+  font-weight: bold;
+  padding: 5px 10px;
+  transition: 0.3s;
+}
+  
+.nav-list li a:hover {
+  background: #ffd700;
+  color: black;
+  border-radius: 5px;
+}
+
+.container {
+  position: relative;
+  z-index: 1;
+  max-width: 1200px;
+  margin: 10px auto 50px auto;
+  padding: 0 20px;
+  overflow-x: auto;
+}
+
+h1 {
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+  text-shadow: 2px 2px 8px rgba(0,0,0,0.6);
+  color: white
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: rgba(255,255,255,0.05);
+  border-radius: 10px;
+  overflow: hidden;
+  min-width: 900px;
+  color: white;
+}
+
+th, td {
+  padding: 12px 15px;
+  border-bottom: 1px solid rgba(255,255,255,0.2);
+  text-align: center;
+}
+th {
+  background: rgba(255,255,255,0.1);
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  color: white
+}
+tr:hover { background: rgba(255,255,255,0.2); }
+
+@media(max-width:1200px){
+  table { font-size: 0.9rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- Video Background -->
+<video class="video-bg" autoplay muted loop>
+  <source src="https://cdn.pixabay.com/video/2019/12/09/30016-378309079_large.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
+
+<div class="overlay"></div>
+
+<header class="header-nav">
+  <div class="logo">
+    <a href="index.html">
+      <img src="https://i.postimg.cc/2SXZKpvQ/Desain-tanpa-judul-(8)-Photoroom.png" alt="Logo">
+    </a>
+  </div>
+  <nav>
+    <ul class="nav-list">
+      <li><a href="index.html">Home</a></li>
+    </ul>
+  </nav>
+</header>
+
+<div class="container">
+  <h1>Balance Bank</h1>
+
+  <table>
+    <thead>
+      <tr>
+        <th>No</th>
+        <th>Bank</th>
+        <th>Nama</th>
+        <th>Rekening</th>
+        <th>Penjualan</th>
+        <th>Keuangan</th>
+        <th>Casbon</th>
+        <th>Saldo Akhir</th>
+      </tr>
+    </thead>
+    <tbody id="balance-body"></tbody>
+  </table>
+</div>
+
+<script>
+const execURL = "https://script.google.com/macros/s/AKfycbxx5PnSWG3kL403fAuXzO3r6b7C3KtedgN30en6tLhfWmxPBtJAsN76eL7s8qScKAAe/exec";
+let allData = [];
+
+function formatNumber(num) {
+  if (isNaN(num)) return 0;
+  return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+}
+
+fetch(execURL)
+  .then(res => res.json())
+  .then(data => {
+    allData = data;
+    renderTable(allData);
+  })
+  .catch(err => console.error("Error fetch balance bank:", err));
+
+function renderTable(data) {
+  const tbody = document.getElementById("balance-body");
+  tbody.innerHTML = "";
+
+  data.forEach((item, index) => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${index + 1}</td>
+      <td>${item.bank || "-"}</td>
+      <td>${item.nama || "-"}</td>
+      <td>${item.rek || "-"}</td>
+      <td>${formatNumber(item.penjualan)}</td>
+      <td>${formatNumber(item.keuangan)}</td>
+      <td>${formatNumber(item.casbon)}</td>
+      <td>${formatNumber(item.saldoakhir)}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+</script>
+
+</body>
+</html>
