@@ -65,12 +65,13 @@ body {
   border-radius: 5px;
 }
 
-
-
 .container {
-  max-width: 900px;
-  margin: auto;
-  padding: 20px;
+  position: relative;
+  z-index: 1;
+  max-width: 1200px;
+  margin: 10px auto 50px auto;
+  padding: 0 20px;
+  overflow-x: auto;
 }
 
 h1, h2 { text-align: center; }
