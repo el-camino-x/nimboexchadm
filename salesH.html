@@ -3,43 +3,33 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>History Sales Transaction</title>
+<title>Customer Listing</title>
 <link rel="icon" href="https://i.postimg.cc/NM2wYX5f/image-Photoroom.png" type="image/png">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
 <style>
 
 body, html {
   margin: 0;
   padding: 0;
-  height: 100%;
   font-family: 'Poppins', sans-serif;
   color: #fff;
   overflow-x: hidden;
-  background: transparent;
-}
-
-thead th:nth-child(4),
-tbody td:nth-child(4) {
-  text-align: left;
 }
 
 .video-bg {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
   z-index: -2;
 }
 
 .overlay {
   position: fixed;
-  top: 0;
-  left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0,0,0,0.25);
+  background: rgba(0,0,0,0.7);
   z-index: -1;
 }
 
@@ -81,92 +71,103 @@ tbody td:nth-child(4) {
 .container {
   position: relative;
   z-index: 1;
-  max-width: 1200px;
-  margin: 10px auto 50px auto;
-  padding: 0 20px;
-  overflow-x: auto;
+  max-width: 1000px;
+  margin: 1px auto 20px auto; 
+  padding: 15px;
 }
 
 h1 {
   text-align: center;
-  font-size: 2.5rem;
-  margin-bottom: 20px;
-  text-shadow: 2px 2px 8px rgba(0,0,0,0.6);
+  margin-bottom: 15px;
 }
 
-/* FILTER VERTIKAL */
-.filter-group {
+.filter-wrapper {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  gap: 15px;
+  gap: 10px;
   margin-bottom: 20px;
 }
 
-.filter-item {
-  display: flex;
-  flex-direction: column;
-}
-
-.filter-item label {
-  font-weight: 600;
-  margin-bottom: 5px;
-}
-
-.filter-item input,
-.filter-item select,
-.filter-item button {
-  padding: 8px 12px;
-  border-radius: 5px;
+#search {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
   border: none;
   outline: none;
-  font-size: 0.95rem;
-  width: 220px;
-}
-
-.filter-item button {
-  background: #ffd700;
-  color: black;
-  font-weight: bold;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-.filter-item button:hover {
-  background: #e6c200;
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-  background: rgba(255,255,255,0.05);
-  border-radius: 10px;
-  overflow: hidden;
-  min-width: 1000px;
-}
-th, td {
-  padding: 12px 15px;
-  border-bottom: 1px solid rgba(255,255,255,0.2);
-  text-align: center;
-}
-th {
   background: rgba(255,255,255,0.1);
-  position: sticky;
-  top: 0;
-  z-index: 1;
+  color: #fff;
 }
-tr:hover { background: rgba(255,255,255,0.2); }
 
-@media(max-width:1200px){
-  table { font-size: 0.9rem; }
+.filter-row {
+  display: flex;
+  gap: 10px;
 }
+
+select {
+  flex: 1;
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+  outline: none;
+  background: rgba(255,255,255,0.1);
+  color: #fff;
+}
+
+select option {
+  color: #000;
+}
+
+.customer-card {
+  background: rgba(255,255,255,0.06);
+  backdrop-filter: blur(10px);
+  border-radius: 15px;
+  padding: 15px;
+  margin-bottom: 12px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+  transition: 0.2s;
+}
+
+.customer-card:hover {
+  transform: translateY(-3px);
+}
+
+.name {
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.badge {
+  font-size: 0.85rem;
+  opacity: 0.8;
+  margin-bottom: 8px;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+  margin-top: 4px;
+}
+
+.back-btn {
+  margin-top: 20px;
+  width: 100%;
+  height: 50px;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(145deg, #FFD700, #FF69B4);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+
 </style>
 </head>
+
 <body>
 
 <video class="video-bg" autoplay muted loop>
-  <source src="https://cdn.pixabay.com/video/2019/12/09/30016-378309079_large.mp4" type="video/mp4">
-  Your browser does not support the video tag.
+  <source src="https://cdn.pixabay.com/video/2019/12/09/30016-378309079_large.mp4">
 </video>
 
 <div class="overlay"></div>
@@ -185,140 +186,35 @@ tr:hover { background: rgba(255,255,255,0.2); }
 </header>
 
 <div class="container">
-  <h1>Nimbo History Sales Transaction</h1>
 
-  <!-- FILTER VERTIKAL -->
-  <div class="filter-group">
-    <div class="filter-item">
-      <label for="filter-nama">Filter Nama</label>
-      <input type="text" id="filter-nama" placeholder="Masukkan nama...">
-    </div>
+  <h1>👥 CUSTOMER LISTING</h1>
 
-    <div class="filter-item">
-      <label for="filter-agent">Filter Agent</label>
-      <select id="filter-agent">
-        <option value="">Pilih Agent...</option>
+  <div class="filter-wrapper">
+
+    <input type="text" id="search" placeholder="🔍 CARI NAMA...">
+
+    <div class="filter-row">
+      <select id="levelFilter">
+        <option value="ALL">ALL LEVEL</option>
+      </select>
+
+      <select id="sortFilter">
+        <option value="desc">💰 PROFIT TERBESAR</option>
+        <option value="asc">💸 PROFIT TERKECIL</option>
       </select>
     </div>
 
-    <div class="filter-item">
-      <label for="filter-tanggal">Filter Tanggal</label>
-      <input type="date" id="filter-tanggal">
-    </div>
-
-    <div class="filter-item">
-      <button id="reset-filter">Reset Filter</button>
-    </div>
   </div>
 
-  <table>
-    <thead>
-      <tr>
-        <th>No</th>
-        <th>Tanggal</th>
-        <th>Jam</th>
-        <th>Nama</th>
-        <th>Rate</th>
-        <th>Dollar</th>
-        <th>Agent</th>
-        <th>Total</th>
-        <th>Currency</th>
-        <th>Modal</th>
-      </tr>
-    </thead>
-    <tbody id="history-body"></tbody>
-  </table>
+  <div id="customerList"></div>
+
+  <button class="back-btn" onclick="location.href='index.html'">
+    ⬅ BACK
+  </button>
+
 </div>
 
-<script>
-let allData = [];
-
-fetch('https://script.google.com/macros/s/AKfycbyMF5FhpYhtFOgVVa_0YWpMkuZj-nWFpaFmqEJCv9VZTWTSnVtQVXyv9W1X4EyP2Wp5/exec')
-  .then(res => res.json())
-  .then(data => {
-    allData = data;
-
-    allData.sort((a, b) => new Date(b.tanggal) - new Date(a.tanggal) || new Date(b.jam) - new Date(a.jam));
-
-    populateAgentDropdown();
-    renderTable(allData);
-  })
-  .catch(err => console.error('Error fetch history:', err));
-
-function renderTable(data) {
-  const tbody = document.getElementById('history-body');
-  tbody.innerHTML = '';
-
-  data.forEach((item, index) => {
-    let tanggal = new Date(item.tanggal);
-    let options = { day: 'numeric', month: 'short', year: 'numeric' };
-    let tanggalFormatted = isNaN(tanggal.getTime()) ? '-' : tanggal.toLocaleDateString('en-GB', options).replace(/ /g, ' ');
-    let jam = new Date(item.jam);
-    let jamFormatted = isNaN(jam.getTime()) ? '-' : jam.toLocaleTimeString('en-GB', { hour12: false });
-    let rateFormatted = (item.rate / 1000).toFixed(3);
-    let dollarFormatted = `$${item.dollar}`;
-    let totalFormatted = Number(item.total).toLocaleString('id-ID');
-    let modalFormatted = (item.modal / 1000).toFixed(3);
-
-    const tr = document.createElement('tr');
-    tr.innerHTML = `
-      <td>${index + 1}</td>
-      <td>${tanggalFormatted}</td>
-      <td>${jamFormatted}</td>
-      <td>${item.nama}</td>
-      <td>${rateFormatted}</td>
-      <td>${dollarFormatted}</td>
-      <td>${item.agent}</td>
-      <td>${totalFormatted}</td>
-      <td>${item.currency}</td>
-      <td>${modalFormatted}</td>
-    `;
-    tbody.appendChild(tr);
-  });
-}
-
-function populateAgentDropdown() {
-  const agentSelect = document.getElementById('filter-agent');
-  const agents = [...new Set(allData.map(item => item.agent))];
-  agents.forEach(agent => {
-    const option = document.createElement('option');
-    option.value = agent.toLowerCase();
-    option.textContent = agent;
-    agentSelect.appendChild(option);
-  });
-}
-
-document.getElementById('filter-nama').addEventListener('input', filterData);
-document.getElementById('filter-agent').addEventListener('change', filterData);
-document.getElementById('filter-tanggal').addEventListener('change', filterData);
-
-function filterData() {
-  const namaVal = document.getElementById('filter-nama').value.toLowerCase();
-  const agentVal = document.getElementById('filter-agent').value.toLowerCase();
-  const tanggalVal = document.getElementById('filter-tanggal').value; 
-
-  const filtered = allData.filter(item => {
-    let tanggal = new Date(item.tanggal);
-    let tanggalISO = isNaN(tanggal.getTime()) ? '' : tanggal.toISOString().slice(0,10); 
-
-    return (
-      item.nama.toLowerCase().includes(namaVal) &&
-      item.agent.toLowerCase().includes(agentVal) &&
-      (tanggalVal === '' || tanggalISO === tanggalVal)
-    );
-  });
-
-  renderTable(filtered);
-}
-
-// RESET FILTER
-document.getElementById('reset-filter').addEventListener('click', () => {
-  document.getElementById('filter-nama').value = '';
-  document.getElementById('filter-agent').value = '';
-  document.getElementById('filter-tanggal').value = '';
-  renderTable(allData);
-});
-</script>
+<script src="customer.js"></script>
 
 </body>
 </html>
