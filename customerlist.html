@@ -43,7 +43,6 @@ h1 {
   margin-bottom: 15px;
 }
 
-/* FILTER BOX */
 .filter-box {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
@@ -58,7 +57,6 @@ input, select {
   outline: none;
 }
 
-/* CARD */
 .customer-card {
   background: rgba(255,255,255,0.06);
   backdrop-filter: blur(10px);
@@ -138,6 +136,42 @@ input, select {
   border-radius: 5px;
 }
 
+.filter-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.filter-row {
+  display: flex;
+  gap: 10px;
+}
+
+#search {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: none;
+  outline: none;
+  background: rgba(255,255,255,0.1);
+  color: #fff;
+}
+
+select {
+  flex: 1;
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+  outline: none;
+  background: rgba(255,255,255,0.1);
+  color: #fff;
+}
+
+select option {
+  color: #000;
+}
+
 </style>
 </head>
 
@@ -166,22 +200,25 @@ input, select {
 
   <h1>👥 CUSTOMER LISTING</h1>
 
-  <!-- FILTER -->
-  <div class="filter-box">
-    <input type="text" id="search" placeholder="🔍 Cari nama...">
+<div class="filter-wrapper">
 
+  <input type="text" id="search" placeholder="🔍 CARI NAMA...">
+
+  <div class="filter-row">
     <select id="levelFilter">
-      <option value="ALL">Semua Level</option>
+      <option value="ALL">ALL LEVEL</option>
       <option value="NEW">NEW</option>
       <option value="REGULAR">REGULAR</option>
-      <option value="CEO">CEO</option>
+      <option value="CEO 👑">CEO</option>
     </select>
 
     <select id="sortFilter">
-      <option value="desc">💰 Profit Terbesar</option>
-      <option value="asc">💰 Profit Terkecil</option>
+      <option value="desc">💰 PROFIT TERBESAR</option>
+      <option value="asc">💸 PROFIT TERKECIL</option>
     </select>
   </div>
+
+</div>
 
   <div id="customerList"></div>
 
@@ -189,7 +226,7 @@ input, select {
 
 </div>
 
-<script src="customerlist.js"></script>
+<script src="customer.js"></script>
 
 </body>
 </html>
