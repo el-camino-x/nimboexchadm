@@ -60,10 +60,11 @@ body, html {
 @media(max-width:480px){
   h1 { font-size: 2rem; }
 
-  .home-buttons {
-    grid-template-columns: repeat(2, 1fr); 
-    gap: 12px;
-  }
+.home-buttons {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 15px;
+}
 
   .home-buttons button {
     width: 100%;
