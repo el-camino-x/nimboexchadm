@@ -133,13 +133,11 @@ form.addEventListener("submit", async e => {
   };
 
   try {
-    await fetch(SHEET_URL, {
-      method: "POST",
-      body: JSON.stringify(data),
-      headers: {
-        "Content-Type": "application/json"
-      }
-    });
+await fetch(SHEET_URL, {
+  method: "POST",
+  mode: "no-cors",
+  body: new URLSearchParams(data)
+});
 
     addToDashboard({
       TANGGAL: now,
