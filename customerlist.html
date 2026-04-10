@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Customer Listing</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+body, html {
+  margin: 0;
+  padding: 0;
+  font-family: 'Poppins', sans-serif;
+  color: #fff;
+}
+
+.video-bg {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1;
+}
+
+.overlay {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.7);
+}
+
+.container {
+  position: relative;
+  z-index: 1;
+  max-width: 1000px;
+  margin: 30px auto;
+  padding: 20px;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+/* FILTER BOX */
+.filter-box {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+input, select {
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+  outline: none;
+}
+
+/* CARD */
+.customer-card {
+  background: rgba(255,255,255,0.06);
+  backdrop-filter: blur(10px);
+  border-radius: 15px;
+  padding: 15px;
+  margin-bottom: 12px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+  transition: 0.2s;
+}
+
+.customer-card:hover {
+  transform: translateY(-3px);
+}
+
+.name {
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.badge {
+  font-size: 0.85rem;
+  opacity: 0.8;
+  margin-bottom: 8px;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+  margin-top: 4px;
+}
+
+.back-btn {
+  margin-top: 20px;
+  width: 100%;
+  height: 50px;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(145deg, #FFD700, #FF69B4);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.header-nav {
+  display: flex;
+  justify-content: space-between; 
+  align-items: center;
+  background: #222;
+  padding: 10px 20px;
+  border-bottom: 2px solid #ffd700;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.header-nav .logo img {
+  height: 50px;   
+  width: auto;
+  border-radius: 10px;
+}
+.nav-list {
+  list-style: none;
+  display: flex;
+  margin: 0;
+  padding: 0;
+}
+.nav-list li a {
+  text-decoration: none;
+  color: white;
+  font-weight: bold;
+  padding: 5px 10px;
+  transition: 0.3s;
+}
+  
+.nav-list li a:hover {
+  background: #ffd700;
+  color: black;
+  border-radius: 5px;
+}
+
+</style>
+</head>
+
+<body>
+
+<header class="header-nav">
+  <div class="logo">
+    <a href="index.html">
+      <img src="https://i.postimg.cc/2SXZKpvQ/Desain-tanpa-judul-(8)-Photoroom.png" alt="Logo">
+    </a>
+  </div>
+  <nav>
+    <ul class="nav-list">
+      <li><a href="index.html">Home</a></li>
+    </ul>
+  </nav>
+</header>
+
+<video class="video-bg" autoplay muted loop>
+  <source src="https://cdn.pixabay.com/video/2019/12/09/30016-378309079_large.mp4">
+</video>
+
+<div class="overlay"></div>
+
+<div class="container">
+
+  <h1>👥 CUSTOMER LISTING</h1>
+
+  <!-- FILTER -->
+  <div class="filter-box">
+    <input type="text" id="search" placeholder="🔍 Cari nama...">
+
+    <select id="levelFilter">
+      <option value="ALL">Semua Level</option>
+      <option value="NEW">NEW</option>
+      <option value="REGULAR">REGULAR</option>
+      <option value="CEO 👑">CEO</option>
+    </select>
+
+    <select id="sortFilter">
+      <option value="desc">💰 Profit Terbesar</option>
+      <option value="asc">💰 Profit Terkecil</option>
+    </select>
+  </div>
+
+  <div id="customerList"></div>
+
+  <button class="back-btn" onclick="location.href='index.html'">⬅ BACK</button>
+
+</div>
+
+<script src="customerlist.js"></script>
+
+</body>
+</html>
