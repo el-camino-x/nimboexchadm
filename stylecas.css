@@ -186,14 +186,12 @@ button {
   transform: scale(0.98);
 }
 
-/* HOVER */
 .currency-box button:hover {
   opacity: 1;
   border-color: #ffd700;
   color: #fff;
 }
 
-/* ACTIVE (KONTRAS UTAMA) */
 .currency-box button.active {
   background: linear-gradient(135deg, #ffd700, #ffb300);
   color: #000;
@@ -209,7 +207,7 @@ button {
 }
 
 .auto-field {
-  background: rgba(255, 215, 0, 0.08); /* gold tipis */
+  background: rgba(255, 215, 0, 0.08);
   border: 1px solid rgba(255, 215, 0, 0.35);
   color: #ffd700;
   font-weight: bold;
@@ -218,7 +216,6 @@ button {
   cursor: not-allowed;
 }
 
-/* efek fokus tetap elegan */
 .auto-field:focus {
   outline: none;
   box-shadow: 0 0 8px rgba(255, 215, 0, 0.3);
