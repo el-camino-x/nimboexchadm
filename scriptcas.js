@@ -1,3 +1,5 @@
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzQIv9Jb0dWGFAVR70H9m9SQmSSUsFZuexWIcRWfZc-vBGqDTk1aJD1LykGVtCGw1A_/exec";
+
 const form = document.getElementById("casbon-form");
 
 const nama = document.getElementById("nama");
@@ -17,11 +19,10 @@ const usdBtn = document.getElementById("usd-btn");
 const rielBtn = document.getElementById("riel-btn");
 
 const dashboard = document.querySelector("#dashboard tbody");
-const submitBtn = form.querySelector("button[type='submit']");
-
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx6YBrm1f57y61opAjsYeDbkwc3cmxnFPN3CrJPrwwqFTza-D3Mut4q8xxAaIeFxnbN/exec";
+const submitBtn = document.querySelector("button[type='submit']");
 
 let currency = "USD";
+let isLoading = false;
 
 // ================= TIME =================
 function updateTime() {
@@ -29,60 +30,82 @@ function updateTime() {
   tanggal.value = now.toLocaleDateString("id-ID");
   jam.value = now.toLocaleTimeString("id-ID");
 }
-
 setInterval(updateTime, 1000);
 updateTime();
 
-// ================= FORMAT =================
-function formatRupiah(num) {
-  return "Rp. " + Number(num || 0).toLocaleString("id-ID");
+// ================= FORMAT UANG =================
+function formatRupiah(val) {
+  const num = parseInt(String(val).replace(/[^0-9]/g, "")) || 0;
+  return "Rp " + num.toLocaleString("id-ID");
+}
+
+function formatDollar(val) {
+  const num = parseFloat(String(val).replace(/[^0-9.]/g, "")) || 0;
+  return "$ " + num.toLocaleString("en-US");
+}
+
+// ================= FORMAT BUNGA (🔥 FIX 0.1 → 10%) =================
+function formatBunga(val) {
+  if (!val) return "-";
+
+  let str = String(val).trim();
+
+  // kalau sudah ada %
+  if (str.includes("%")) return str;
+
+  let num = parseFloat(str);
+
+  if (isNaN(num)) return "-";
+
+  // 0.1 → 10%
+  if (num > 0 && num < 1) {
+    return (num * 100) + "%";
+  }
+
+  return num + "%";
+}
+
+// ================= FORMAT TANGGAL =================
+function formatDate(dateString) {
+  if (!dateString) return "-";
+
+  const date = new Date(dateString);
+  if (isNaN(date.getTime())) return "-";
+
+  const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  return `${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`;
 }
 
 // ================= INPUT VALIDATION =================
-
-// nama only letters
 nama.addEventListener("input", () => {
   nama.value = nama.value.replace(/[^a-zA-Z\s]/g, "");
 });
 
-// rate format Rp.
 rate.addEventListener("input", () => {
   let val = rate.value.replace(/[^0-9]/g, "");
-
-  if (!val) {
-    rate.value = "";
-    return;
-  }
-
-  rate.value = "Rp. " + Number(val).toLocaleString("id-ID");
+  rate.value = val ? "Rp " + Number(val).toLocaleString("id-ID") : "";
 });
 
-// usd format $
 usd.addEventListener("input", () => {
   let val = usd.value.replace(/[^0-9.]/g, "");
-
-  if (!val) {
-    usd.value = "";
-    return;
-  }
-
-  usd.value = "$ " + Number(val).toLocaleString("en-US");
+  usd.value = val ? "$ " + Number(val).toLocaleString("en-US") : "";
 });
 
-// bunga %
 bunga.addEventListener("input", () => {
-  let val = bunga.value.replace(/[^0-9]/g, "");
+  let val = bunga.value.replace(/[^0-9.]/g, "");
   bunga.value = val ? val + "%" : "";
 });
 
-// ================= CURRENCY TOGGLE =================
-usdBtn.addEventListener("click", () => {
+// ================= CURRENCY =================
+usdBtn?.addEventListener("click", (e) => {
+  e.preventDefault();
   currency = "USD";
   usdBtn.classList.add("active");
   rielBtn.classList.remove("active");
 });
 
-rielBtn.addEventListener("click", () => {
+rielBtn?.addEventListener("click", (e) => {
+  e.preventDefault();
   currency = "RIEL";
   rielBtn.classList.add("active");
   usdBtn.classList.remove("active");
@@ -92,97 +115,114 @@ rielBtn.addEventListener("click", () => {
 function hitung() {
   const r = parseFloat(rate.value.replace(/[^0-9]/g, "")) || 0;
   const u = parseFloat(usd.value.replace(/[^0-9.]/g, "")) || 0;
-  const b = parseFloat(bunga.value.replace(/[^0-9]/g, "")) || 0;
+  const b = parseFloat(bunga.value.replace(/[^0-9.]/g, "")) || 0;
 
   const rp = r * u;
   const bungaVal = rp * (b / 100);
+  const total = rp + bungaVal;
 
   totalRupiah.value = formatRupiah(rp);
   totalBunga.value = formatRupiah(bungaVal);
-  totalBayar.value = formatRupiah(rp + bungaVal);
+  totalBayar.value = formatRupiah(total);
 }
 
-[rate, usd, bunga].forEach(el => {
-  el.addEventListener("input", hitung);
-});
+[rate, usd, bunga].forEach(el => el.addEventListener("input", hitung));
 
-// ================= VALIDATION =================
-function isValidForm() {
-  const namaVal = nama.value.trim();
-  const rateVal = rate.value.replace(/[^0-9]/g, "");
-  const usdVal = usd.value.replace(/[^0-9.]/g, "");
-  const bungaVal = bunga.value.replace(/[^0-9]/g, "");
-  const tempoVal = jatuhTempo.value;
-
-  return namaVal && rateVal && usdVal && bungaVal && tempoVal;
+// ================= VALID =================
+function isValid() {
+  return nama.value && rate.value && usd.value && bunga.value && jatuhTempo.value;
 }
 
-// ================= TABLE =================
-function addRow(d) {
-  const tr = document.createElement("tr");
+// ================= LOAD TABLE =================
+async function loadCasbon() {
+  try {
+    const res = await fetch(SCRIPT_URL + "?action=getCasbon");
+    const text = await res.text();
 
-  tr.innerHTML = `
-    <td>${d.tanggal}</td>
-    <td>${d.jam}</td>
-    <td>${d.nama}</td>
-    <td>${d.rate}</td>
-    <td>${d.totalDollar}</td>
-    <td>${d.currency}</td>
-    <td>${d.totalRupiah}</td>
-    <td>${d.bunga}</td>
-    <td>${d.totalBayar}</td>
-    <td>${d.jatuhTempo}</td>
-  `;
+    let data = [];
+    try {
+      data = JSON.parse(text);
+    } catch (e) {
+      data = [];
+    }
 
-  dashboard.prepend(tr);
+    if (!Array.isArray(data)) data = [];
+
+    dashboard.innerHTML = "";
+
+    data.forEach(d => {
+      const tr = document.createElement("tr");
+
+      tr.innerHTML = `
+        <td>${formatDate(d.tanggal)}</td>
+        <td>${d.nama || "-"}</td>
+        <td>${formatRupiah(d.rate)}</td>
+        <td>${formatDollar(d.totalDollar)}</td>
+        <td>${formatBunga(d.bunga)}</td>
+        <td>${formatRupiah(d.totalBunga)}</td>
+        <td>${formatRupiah(d.totalBayar)}</td>
+      `;
+
+      dashboard.appendChild(tr);
+    });
+
+  } catch (err) {
+    console.log("LOAD ERROR:", err);
+  }
 }
 
 // ================= SUBMIT =================
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
 
-  if (!isValidForm()) {
-    alert("⚠ SEMUA FIELD WAJIB DIISI!");
-    return;
-  }
+  if (isLoading) return;
+  if (!isValid()) return alert("Semua field wajib diisi!");
 
-  // ================= LOCK BUTTON =================
+  isLoading = true;
   submitBtn.disabled = true;
-  submitBtn.innerText = "LOADING...";
+  submitBtn.innerText = "Mengirim...";
+
+  const bungaValue = bunga.value.replace(/[^0-9.]/g, "");
+
+  const data = {
+    tanggal: tanggal.value,
+    jam: jam.value,
+    nama: nama.value,
+    rate: rate.value,
+    totalDollar: usd.value,
+    currency,
+    totalRupiah: totalRupiah.value,
+    bunga: bungaValue + "%",
+    totalBunga: totalBunga.value,
+    totalBayar: totalBayar.value,
+    jatuhTempo: jatuhTempo.value
+  };
 
   try {
-    const data = {
-      tanggal: tanggal.value,
-      jam: jam.value,
-      nama: nama.value,
-      rate: rate.value,
-      totalDollar: usd.value,
-      currency: currency,
-      totalRupiah: totalRupiah.value,
-      bunga: bunga.value,
-      totalBunga: totalBunga.value,
-      totalBayar: totalBayar.value,
-      jatuhTempo: jatuhTempo.value
-    };
-
     await fetch(SCRIPT_URL, {
       method: "POST",
       mode: "no-cors",
       body: new URLSearchParams(data)
     });
 
-    addRow(data);
-
-    alert("CASBON TERKIRIM ✔");
-
     form.reset();
     updateTime();
 
+    setTimeout(loadCasbon, 900);
+
+    alert("CASBON TERKIRIM ✔");
+
   } catch (err) {
-    alert("GAGAL KIRIM ❌");
-  } finally {
-    // ================= UNLOCK BUTTON =================
-    submitBtn.disabled = false;
-    submitBtn.innerText = "KIRIM CASBON";
+    alert("Gagal kirim data");
   }
+
+  submitBtn.disabled = false;
+  submitBtn.innerText = "KIRIM CASBON";
+  isLoading = false;
+});
+
+// ================= INIT =================
+document.addEventListener("DOMContentLoaded", () => {
+  updateTime();
+  loadCasbon();
 });
