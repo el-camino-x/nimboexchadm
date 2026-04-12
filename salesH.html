@@ -94,13 +94,17 @@ h1 {
   text-shadow: 2px 2px 8px rgba(0,0,0,0.6);
 }
 
-/* FILTER VERTIKAL */
 .filter-group {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  gap: 15px;
-  margin-bottom: 20px;
+  gap: 14px;
+  margin-bottom: 22px;
+}
+
+.filter-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
 }
 
 .filter-item {
@@ -109,27 +113,66 @@ h1 {
 }
 
 .filter-item label {
+  font-size: 12px;
   font-weight: 600;
-  margin-bottom: 5px;
+  margin-bottom: 6px;
+  color: rgba(255,255,255,0.85);
 }
 
 .filter-item input,
-.filter-item select,
-.filter-item button {
-  padding: 8px 12px;
-  border-radius: 5px;
-  border: none;
+.filter-item select {
+  width: 220px;
+  padding: 10px 12px;
+  border-radius: 10px;
+
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.08);
+
+  color: #fff;
+  font-size: 14px;
+
   outline: none;
-  font-size: 0.95rem;
+  backdrop-filter: blur(12px);
+
+  transition: all 0.25s ease;
+}
+
+.filter-item select option {
+  background: #1e1e1e; /* biar gelap premium */
+  color: #fff;
+}
+
+.filter-item input::placeholder {
+  color: rgba(255,255,255,0.4);
+}
+
+.filter-item input:focus,
+.filter-item select:focus {
+  border: 1px solid rgba(255, 215, 0, 0.6);
+  box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.12);
+  transform: translateY(-1px);
+}
+
+.filter-reset {
   width: 220px;
 }
 
 .filter-item button {
-  background: #ffd700;
+  padding: 10px 12px;
+  border-radius: 10px;
+
+  background: linear-gradient(135deg, #ffd700, #ffcc00);
   color: black;
-  font-weight: bold;
+  font-weight: 700;
+
+  border: none;
   cursor: pointer;
-  transition: 0.3s;
+
+  transition: all 0.25s ease;
+}
+
+.filter-item button:hover {
+  transform: translateY(-2px);
 }
 
 .filter-item button:hover {
@@ -160,6 +203,50 @@ tr:hover { background: rgba(255,255,255,0.2); }
 @media(max-width:1200px){
   table { font-size: 0.9rem; }
 }
+
+#pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 25px 0;
+  gap: 10px;
+}
+
+#pagination button {
+  padding: 8px 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.05);
+  color: #fff;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(10px);
+}
+
+#pagination button:hover {
+  background: rgba(255, 215, 0, 0.12);
+  border-color: rgba(255, 215, 0, 0.5);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(255, 215, 0, 0.15);
+}
+
+#pagination button:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+#pagination span {
+  padding: 8px 14px;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.08);
+  font-size: 13px;
+  color: rgba(255,255,255,0.85);
+}
+
 </style>
 </head>
 <body>
@@ -189,15 +276,17 @@ tr:hover { background: rgba(255,255,255,0.2); }
 
   <!-- FILTER VERTIKAL -->
   <div class="filter-group">
-    <div class="filter-item">
-      <label for="filter-nama">Filter Nama</label>
-      <input type="text" id="filter-nama" placeholder="Masukkan nama...">
-    </div>
 
+  <div class="filter-item">
+    <label for="filter-nama">Filter Nama</label>
+    <input type="text" id="filter-nama" placeholder="Masukkan nama...">
+  </div>
+
+  <div class="filter-row">
     <div class="filter-item">
       <label for="filter-agent">Filter Agent</label>
       <select id="filter-agent">
-        <option value="">Pilih Agent...</option>
+        <option value="">All Agent</option>
       </select>
     </div>
 
@@ -205,11 +294,13 @@ tr:hover { background: rgba(255,255,255,0.2); }
       <label for="filter-tanggal">Filter Tanggal</label>
       <input type="date" id="filter-tanggal">
     </div>
-
-    <div class="filter-item">
-      <button id="reset-filter">Reset Filter</button>
-    </div>
   </div>
+
+  <div class="filter-item filter-reset">
+    <button id="reset-filter">Reset Filter</button>
+  </div>
+
+</div>
 
   <table>
     <thead>
@@ -227,42 +318,61 @@ tr:hover { background: rgba(255,255,255,0.2); }
       </tr>
     </thead>
     <tbody id="history-body"></tbody>
-  </table>
+</table>
+
+<div id="pagination"></div>
 </div>
 
 <script>
 let allData = [];
+let filteredData = [];
+
+let currentPage = 1;
+const itemsPerPage = 20;
 
 fetch('https://script.google.com/macros/s/AKfycbyMF5FhpYhtFOgVVa_0YWpMkuZj-nWFpaFmqEJCv9VZTWTSnVtQVXyv9W1X4EyP2Wp5/exec')
   .then(res => res.json())
   .then(data => {
     allData = data;
 
-    allData.sort((a, b) => new Date(b.tanggal) - new Date(a.tanggal) || new Date(b.jam) - new Date(a.jam));
+allData.sort((a, b) => new Date(b.tanggal) - new Date(a.tanggal));
 
-    populateAgentDropdown();
-    renderTable(allData);
+populateAgentDropdown();
+
+filteredData = allData;
+currentPage = 1;
+render();
   })
   .catch(err => console.error('Error fetch history:', err));
 
-function renderTable(data) {
+  function renderTable(data) {
   const tbody = document.getElementById('history-body');
   tbody.innerHTML = '';
 
   data.forEach((item, index) => {
+
+    const realIndex = (currentPage - 1) * itemsPerPage + index + 1;
+
     let tanggal = new Date(item.tanggal);
     let options = { day: 'numeric', month: 'short', year: 'numeric' };
-    let tanggalFormatted = isNaN(tanggal.getTime()) ? '-' : tanggal.toLocaleDateString('en-GB', options).replace(/ /g, ' ');
+    let tanggalFormatted = isNaN(tanggal.getTime())
+      ? '-'
+      : tanggal.toLocaleDateString('en-GB', options).replace(/ /g, ' ');
+
     let jam = new Date(item.jam);
-    let jamFormatted = isNaN(jam.getTime()) ? '-' : jam.toLocaleTimeString('en-GB', { hour12: false });
+    let jamFormatted = isNaN(jam.getTime())
+      ? '-'
+      : jam.toLocaleTimeString('en-GB', { hour12: false });
+
     let rateFormatted = (item.rate / 1000).toFixed(3);
     let dollarFormatted = `$${item.dollar}`;
     let totalFormatted = Number(item.total).toLocaleString('id-ID');
     let modalFormatted = (item.modal / 1000).toFixed(3);
 
     const tr = document.createElement('tr');
+
     tr.innerHTML = `
-      <td>${index + 1}</td>
+      <td>${realIndex}</td>
       <td>${tanggalFormatted}</td>
       <td>${jamFormatted}</td>
       <td>${item.nama}</td>
@@ -273,6 +383,7 @@ function renderTable(data) {
       <td>${item.currency}</td>
       <td>${modalFormatted}</td>
     `;
+
     tbody.appendChild(tr);
   });
 }
@@ -308,7 +419,9 @@ function filterData() {
     );
   });
 
-  renderTable(filtered);
+  filteredData = filtered;
+currentPage = 1;
+render();
 }
 
 // RESET FILTER
@@ -316,8 +429,77 @@ document.getElementById('reset-filter').addEventListener('click', () => {
   document.getElementById('filter-nama').value = '';
   document.getElementById('filter-agent').value = '';
   document.getElementById('filter-tanggal').value = '';
-  renderTable(allData);
+  filteredData = allData;
+currentPage = 1;
+render();
 });
+
+function render() {
+  const start = (currentPage - 1) * itemsPerPage;
+  const end = start + itemsPerPage;
+
+  const pageData = filteredData.slice(start, end);
+
+  renderTable(pageData);
+  renderPagination();
+}
+
+function renderPagination() {
+  const container = document.getElementById('pagination');
+
+  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+
+  if (totalPages <= 1) {
+    container.innerHTML = '';
+    return;
+  }
+
+  container.innerHTML = `
+    <div style="display:flex;gap:10px;justify-content:center;align-items:center;margin:20px 0;">
+
+      <button onclick="goToPage(${currentPage - 1})"
+        ${currentPage === 1 ? "disabled" : ""}>
+        ◀ Prev
+      </button>
+
+      <div style="padding:6px 12px;background:rgba(255,255,255,0.1);border-radius:8px;">
+        Page ${currentPage} / ${totalPages}
+      </div>
+
+      <button onclick="goToPage(${currentPage + 1})"
+        ${currentPage === totalPages ? "disabled" : ""}>
+        Next ▶
+      </button>
+
+    </div>
+  `;
+}
+
+function goToPage(page) {
+  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+
+  if (page < 1 || page > totalPages) return;
+
+  currentPage = page;
+  render();
+
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth'
+  });
+}
+
+function goToPage(page) {
+  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+
+  if (page < 1 || page > totalPages) return;
+
+  currentPage = page;
+  render();
+}
+
+
+
 </script>
 
 </body>
