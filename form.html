@@ -3,188 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nimbo Dashboard</title>
+<title>NIMBO EXCHANGE FORM</title>
 <link rel="icon" href="https://i.postimg.cc/NM2wYX5f/image-Photoroom.png" type="image/png">
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
 
 <style>
-
-body, html {
-  margin: 0;
-  padding: 0;
-  font-family: 'Poppins', sans-serif;
-  color: #fff;
-  overflow-x: hidden;
-  background: #0b0f14;
-  padding-top: 35px;
-}
-
-.header-nav {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-
-  padding: 10px 20px;
-  background: #222;
-  border-bottom: 2px solid #ffd700;
-
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  z-index: 1000;
-
-  box-sizing: border-box; 
-}
-
-.header-nav .logo img {
-  height: 50px;
-  border-radius: 10px;
-}
-
-.nav-list {
-  list-style: none;
-  display: flex;
-  margin: 0;
-  padding: 0;
-}
-
-.nav-list li a {
-  text-decoration: none;
-  color: white;
-  font-weight: bold;
-  padding: 5px 10px;
-}
-
-.container {
-  max-width: 1200px;
-  margin: 20px auto;
-  padding: 0 20px;
-}
-
-.cards {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 15px;
-}
-
-@media(max-width: 600px){
-  .cards {
-    grid-template-columns: 1fr;
-  }
-}
-
-.card {
-  position: relative;
-  background: rgba(255,255,255,0.04);
-  border-radius: 14px;
-  padding: 15px;
-  z-index: 1;
-}
-
-.card::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  padding: 1px;
-  border-radius: 14px;
-  background: linear-gradient(
-    90deg,
-    rgba(255,215,0,0.2),
-    rgba(255,255,255,0.05),
-    rgba(255,215,0,0.2)
-  );
-  background-size: 300% 300%;
-  animation: moveBorder 6s linear infinite;
-
-  -webkit-mask: 
-    linear-gradient(#000 0 0) content-box, 
-    linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-
-  pointer-events: none;
-}
-
-@keyframes moveBorder {
-  0% {
-    background-position: 0% 50%;
-  }
-  100% {
-    background-position: 100% 50%;
-  }
-}
-
-.card h3 {
-  margin: 0;
-  font-size: 14px;
-  color: #aaa;
-}
-
-.card p {
-  font-size: 22px;
-  font-weight: bold;
-  margin-top: 10px;
-}
-
-.section-title:not(:first-of-type) {
-  margin-top: 18px;
-}
-
-.profit { color: #00ff9c; }
-.danger { color: #ff4d4d; }
-.info { color: #4da6ff; }
-
-.section-title {
-  margin: 16px 0 8px;
-  font-size: 15px;
-  font-weight: 600;
-  color: #f0f0f0;
-  border-left: 3px solid rgba(255, 215, 0, 0.4);
-  padding-left: 10px;
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-  background: rgba(255,255,255,0.05);
-  border-radius: 10px;
-  overflow: hidden;
-  min-width: 0;
-}
-
-th, td {
-  padding: 6px 8px;
-  text-align: center;
-  border-bottom: 1px solid rgba(255,255,255,0.2);
-}
-
-th {
-  background: #1b1b1b;
-  color: #eaeaea;
-  border-bottom: 1px solid rgba(255, 215, 0, 0.18);
-}
-
-td {
-  background: rgba(255,255,255,0.02);
-  padding: 7px 8px;
-  font-size: 13px;
-  color: #e6e6e6;
-}
-
-tr:hover {
-  background: rgba(255,255,255,0.15);
-}
-
-tr:hover td {
-  background: rgba(255, 215, 0, 0.06);
-  transition: 0.25s ease;
-}
-
-.scroll {
-  overflow-x: auto;
-}
-
+  
 .sidebar-toggle{
   position: fixed;
   top: 15px;
@@ -200,7 +25,7 @@ body.sidebar-open .sidebar-toggle{
   opacity: 0;
   pointer-events: none;
 }
-
+  
 .sidebar{
   position: fixed;
   top: 0;
@@ -259,7 +84,6 @@ body.sidebar-open .sidebar-toggle{
   color: #ffd700;
 }
 
-/* SUBMENU */
 .submenu{
   display: none;
   flex-direction: column;
@@ -283,22 +107,12 @@ body.sidebar-open .sidebar-toggle{
   background: rgba(255,255,255,0.05);
 }
 
-.menu-title.active-link{
-  background: rgba(255,215,0,0.12);
-  color: #ffd700;
-  border-left: 3px solid #ffd700;
-  padding-left: 10px;
-}
-
 </style>
-</head>
-
+  
 <body>
 
-<!-- TOGGLE BUTTON -->
 <div class="sidebar-toggle" id="sidebar-toggle">☰</div>
 
-<!-- SIDEBAR -->
 <div class="sidebar" id="sidebar">
 
   <div class="sidebar-header">
@@ -347,224 +161,79 @@ body.sidebar-open .sidebar-toggle{
     
   </div>
 </div>
-
+  
 <header class="header-nav">
-<div class="logo">
-  <img src="https://i.postimg.cc/2SXZKpvQ/Desain-tanpa-judul-(8)-Photoroom.png">
-</div>
-  <ul class="nav-list">
-    <li><a href="index.html">Home</a></li>
-  </ul>
+  <div class="logo">
+      <img src="https://i.postimg.cc/2SXZKpvQ/Desain-tanpa-judul-(8)-Photoroom.png" alt="Logo">
+    </a>
+  </div>
+  <nav>
+    <ul class="nav-list">
+      <li><a href="index.html">Home</a></li>
+    </ul>
+  </nav>
 </header>
-
+  
 <div class="container">
 
-  <h2>📈 Welcome to Nimbo Dashboard</h2>
+<h1 class="title-pro">
+  NIMBO <span>EXCHANGE</span>
+</h1>
+<p class="subtitle">Secure Transaction Form</p>
 
-  <div class="cards">
-    <div class="card">
-      <h3>Total Assets</h3>
-      <p id="assets" class="info">Rp0</p>
-    </div>
+<form id="transaksi-form">
 
-    <div class="card">
-      <h3>Total Profit</h3>
-      <p id="profit" class="profit">Rp0</p>
-    </div>
+  <label>Nama</label>
+  <input type="text" id="nama" placeholder="-" required>
 
-    <div class="card">
-      <h3>Suntik Dana</h3>
-      <p id="suntik" class="info">Rp0</p>
-    </div>
+  <label>Rate (Rp)</label>
+  <input type="text" id="rate" placeholder="-" required>
 
-    <div class="card">
-      <h3>Casbon</h3>
-      <p id="casbon" class="danger">Rp0</p>
-    </div>
+  <label>Total Dollar ($)</label>
+  <input type="text" id="usd" placeholder="-" required>
 
- <div class="card trx-card">
-  <h3>Today's Transactions</h3>
-  <p id="trx-today-count" class="trx-count">0 Transaction</p>
-  <p id="trx-today-usd" class="trx-usd">$0</p>
-</div>
-
-<div class="card trx-card">
-  <h3>Yesterday's Transaction</h3>
-  <p id="trx-yesterday-count" class="trx-count">0 Transaction</p>
-  <p id="trx-yesterday-usd" class="trx-usd">$0</p>
-</div>
-
-<br>
-
-
+  <label>Agent</label>
+  <div class="btn-group">
+    <button type="button" class="agent-btn" data-agent="NICKY">NICKY</button>
+    <button type="button" class="agent-btn" data-agent="MAUDY">MAUDY</button>
   </div>
 
-  <div class="section-title">👤 Profit Per Orang</div>
-  <div class="scroll">
-    <table>
-      <thead>
-        <tr>
-          <th>Nama</th>
-          <th>Profit</th>
-        </tr>
-      </thead>
-      <tbody id="profit-body"></tbody>
-    </table>
+  <label>Total Rupiah</label>
+  <input type="text" id="total-rupiah" readonly>
+
+  <label>Currency</label>
+  <div class="btn-group">
+    <button type="button" class="currency-btn" data-currency="USD">$ USD</button>
+    <button type="button" class="currency-btn" data-currency="RIEL">៛ RIEL</button>
   </div>
 
-<br>
+  <label>Modal (Rp)</label>
+  <input type="text" id="modal" placeholder="-" required>
 
-  <div class="section-title">💸 Suntik Dana</div>
-  <div class="scroll">
-    <table>
-      <thead>
-        <tr>
-          <th>Tanggal</th>
-          <th>Nama</th>
-          <th>Total</th>
-        </tr>
-      </thead>
-      <tbody id="suntik-body"></tbody>
-    </table>
-  </div>
+  <label>Profit</label>
+  <input type="text" id="profit" readonly>
 
-<br>
+  <button type="submit" id="submit-btn">Kirim</button>
+</form>
 
-  <div class="section-title">🧾 Casbon</div>
-  <div class="scroll">
-    <table>
-      <thead>
-        <tr>
-          <th>Tanggal</th>
-          <th>Nama</th>
-          <th>Total</th>
-        </tr>
-      </thead>
-      <tbody id="casbon-body"></tbody>
-    </table>
-  </div>
+<h2>Pending Form</h2>
+<table id="dashboard">
+  <thead>
+    <tr>
+      <th>Tanggal</th>
+      <th>Nama</th>
+      <th>Rate</th>
+      <th>Total $</th>
+      <th>Total Rp</th>
+    </tr>
+  </thead>
+  <tbody>
+  </tbody>
+</table>
 
 </div>
 
 <script>
-const API = "https://script.google.com/macros/s/AKfycbziwlyb7JBOoY6jzHKuu5IX5VWSFif-7MGizW9IE2b0HV9U-6kHbSkUCjAef3LPrQrx/exec";
-
-function formatRp(num){
-  return "Rp" + Number(num || 0).toLocaleString("id-ID");
-}
-
-function formatUSD(num){
-  return "$" + Number(num || 0).toLocaleString("en-US");
-}
-
-fetch(API)
-.then(res => res.json())
-.then(data => {
-
-  console.log("API DATA:", data);
-
-  const profitList = data.profit_per_orang || [];
-  const suntikList = data.suntik_dana_list || [];
-  const casbonList = data.casbon_list || [];
-
-  document.getElementById("assets").innerText =
-    formatRp(data.total_assets || 0);
-
-  const totalProfit = profitList.reduce((sum, x) => sum + (x.profit || 0), 0);
-
-  document.getElementById("profit").innerText =
-    formatRp(totalProfit);
-
-  document.getElementById("suntik").innerText =
-    formatRp(data.suntik_dana_total || 0);
-
-  document.getElementById("casbon").innerText =
-    formatRp(data.casbon_total || 0);
-
-  const profitBody = document.getElementById("profit-body");
-  profitBody.innerHTML = "";
-
-  if (profitList.length === 0) {
-    profitBody.innerHTML = `<tr><td colspan="2">No Data</td></tr>`;
-  } else {
-    profitList.forEach(p => {
-      profitBody.innerHTML += `
-        <tr>
-          <td>${p.nama}</td>
-          <td>${formatRp(p.profit)}</td>
-        </tr>
-      `;
-    });
-  }
-
-  const suntikBody = document.getElementById("suntik-body");
-  suntikBody.innerHTML = "";
-
-  if (suntikList.length === 0) {
-    suntikBody.innerHTML = `<tr><td colspan="3">No Data</td></tr>`;
-  } else {
-    suntikList.forEach(s => {
-      suntikBody.innerHTML += `
-        <tr>
-          <td>${formatDate(s.tanggal)}</td>
-          <td>${s.nama}</td>
-          <td>${formatRp(s.total)}</td>
-        </tr>
-      `;
-    });
-  }
-
-  const casbonBody = document.getElementById("casbon-body");
-  casbonBody.innerHTML = "";
-
-  if (casbonList.length === 0) {
-    casbonBody.innerHTML = `<tr><td colspan="3">No Data</td></tr>`;
-  } else {
-    casbonList.forEach(c => {
-      casbonBody.innerHTML += `
-        <tr>
-          <td>${formatDate(c.tanggal)}</td>
-          <td>${c.nama}</td>
-          <td>${formatRp(c.total)}</td>
-        </tr>
-      `;
-    });
-  }
-
-  const today = data.total_transaction_today || { count:0, usd:0, rp:0 };
-  const yesterday = data.total_transaction_yesterday || { count:0, usd:0, rp:0 };
-
-  document.getElementById("trx-today-count").innerText =
-  `📊 ${today.count} ${today.count === 1 ? "Transaction" : "Transactions"}`;
-
-document.getElementById("trx-today-usd").innerText =
-  `💵 ${formatUSD(today.usd)} | ${formatRp(today.rp)}`;
-
-  document.getElementById("trx-yesterday-count").innerText =
-  `📊 ${yesterday.count} ${yesterday.count === 1 ? "Transaction" : "Transactions"}`;
-
-document.getElementById("trx-yesterday-usd").innerText =
-  `💵 ${formatUSD(yesterday.usd)} | ${formatRp(yesterday.rp)}`;
-
-})
-
-.catch(err => {
-  console.error("API ERROR:", err);
-});
-
-function formatDate(date){
-  if(!date) return "-";
-
-  const d = new Date(date);
-
-  const day = d.getDate();
-  const monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-  const month = monthNames[d.getMonth()];
-  const year = d.getFullYear();
-
-  return `${day}-${month}-${year}`;
-}
-
   const sidebar = document.getElementById('sidebar');
 const toggle = document.getElementById('sidebar-toggle');
 const closeBtn = document.getElementById('sidebar-close');
@@ -586,9 +255,8 @@ document.querySelectorAll('.menu-title').forEach(el => {
   });
 });
 
-
-
 </script>
-
+  
+<script src="script.js"></script>
 </body>
 </html>
