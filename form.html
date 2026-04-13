@@ -10,13 +10,6 @@
   
 <body>
 
-<video class="video-bg" autoplay muted loop>
-  <source src="https://cdn.pixabay.com/video/2019/12/09/30016-378309079_large.mp4" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
-
-<div class="overlay"></div>
-  
 <header class="header-nav">
   <div class="logo">
     <a href="index.html">
@@ -37,55 +30,55 @@
 </h1>
 <p class="subtitle">Secure Transaction Form</p>
 
-  <form id="transaksi-form">
+<form id="transaksi-form">
 
-    <label>Nama</label>
-    <input type="text" id="nama" placeholder="-" required>
+  <label>Nama</label>
+  <input type="text" id="nama" placeholder="-" required>
 
-    <label>Rate (Rp)</label>
-    <input type="text" id="rate" placeholder="-" required>
+  <label>Rate (Rp)</label>
+  <input type="text" id="rate" placeholder="-" required>
 
-    <label>Total Dollar ($)</label>
-    <input type="text" id="usd" placeholder="-" required>
+  <label>Total Dollar ($)</label>
+  <input type="text" id="usd" placeholder="-" required>
 
-    <label>Agent</label>
-    <div class="btn-group">
-      <button type="button" class="agent-btn" data-agent="NICKY">NICKY</button>
-      <button type="button" class="agent-btn" data-agent="MAUDY">MAUDY</button>
-    </div>
+  <label>Agent</label>
+  <div class="btn-group">
+    <button type="button" class="agent-btn" data-agent="NICKY">NICKY</button>
+    <button type="button" class="agent-btn" data-agent="MAUDY">MAUDY</button>
+  </div>
 
-    <label>Total Rupiah</label>
-    <input type="text" id="total-rupiah" readonly>
+  <label>Total Rupiah</label>
+  <input type="text" id="total-rupiah" readonly>
 
-    <label>Currency</label>
-    <div class="btn-group">
-      <button type="button" class="currency-btn" data-currency="USD">$ USD</button>
-      <button type="button" class="currency-btn" data-currency="RIEL">៛ RIEL</button>
-    </div>
+  <label>Currency</label>
+  <div class="btn-group">
+    <button type="button" class="currency-btn" data-currency="USD">$ USD</button>
+    <button type="button" class="currency-btn" data-currency="RIEL">៛ RIEL</button>
+  </div>
 
-    <label>Modal (Rp)</label>
-    <input type="text" id="modal" placeholder="-" required>
+  <label>Modal (Rp)</label>
+  <input type="text" id="modal" placeholder="-" required>
 
-    <label>Profit</label>
-    <input type="text" id="profit" readonly>
+  <label>Profit</label>
+  <input type="text" id="profit" readonly>
 
-    <button type="submit" id="submit-btn">Kirim</button>
-  </form>
+  <button type="submit" id="submit-btn">Kirim</button>
+</form>
 
-  <h2>Pending Form</h2>
-  <table id="dashboard">
-    <thead>
-      <tr>
-        <th>Tanggal</th>
-        <th>Nama</th>
-        <th>Rate</th>
-        <th>Total $</th>
-        <th>Total Rp</th>
-      </tr>
-    </thead>
-    <tbody>
-    </tbody>
-  </table>
+<h2>Pending Form</h2>
+<table id="dashboard">
+  <thead>
+    <tr>
+      <th>Tanggal</th>
+      <th>Nama</th>
+      <th>Rate</th>
+      <th>Total $</th>
+      <th>Total Rp</th>
+    </tr>
+  </thead>
+  <tbody>
+  </tbody>
+</table>
 
 </div>
 
