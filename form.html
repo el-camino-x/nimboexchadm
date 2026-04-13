@@ -7,9 +7,168 @@
 <link rel="icon" href="https://i.postimg.cc/NM2wYX5f/image-Photoroom.png" type="image/png">
 <link rel="stylesheet" href="style.css">
 </head>
+
+<style>
+/* ===== SIDEBAR TOGGLE ===== */
+.sidebar-toggle{
+  position: fixed;
+  top: 15px;
+  left: 15px;
+  z-index: 10000;
+  font-size: 26px;
+  cursor: pointer;
+  color: #ffd700;
+  transition: 0.2s ease;
+}
+
+/* ⛔ HIDE TOGGLE SAAT SIDEBAR OPEN */
+body.sidebar-open .sidebar-toggle{
+  opacity: 0;
+  pointer-events: none;
+}
+/* ===== SIDEBAR ===== */
+.sidebar{
+  position: fixed;
+  top: 0;
+  left: -100%; /* FULL HIDE FIX */
+  width: 280px;
+  height: 100vh;
+  background: #0b0f14;
+  border-right: 1px solid rgba(255,215,0,0.15);
+  transition: 0.3s ease;
+  z-index: 9999;
+  padding: 20px;
+}
+
+.sidebar.active{
+  left: 0;
+}
+
+/* HEADER */
+.sidebar-header{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #ffd700;
+  font-weight: bold;
+  font-size: 18px;
+  margin-bottom: 20px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+/* CLOSE BTN */
+.sidebar-close{
+  cursor: pointer;
+  font-size: 18px;
+  color: #fff;
+  opacity: 0.7;
+}
+
+.sidebar-close:hover{
+  opacity: 1;
+  color: #ffd700;
+}
+
+/* MENU */
+.menu-title{
+  padding: 10px;
+  margin-top: 10px;
+  background: rgba(255,255,255,0.04);
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  color: #e5e7eb;
+  text-decoration: none;
+  display: block;
+}
+
+.menu-title:hover{
+  background: rgba(255,215,0,0.08);
+  color: #ffd700;
+}
+
+/* SUBMENU */
+.submenu{
+  display: none;
+  flex-direction: column;
+  padding-left: 12px;
+}
+
+.menu-item.active .submenu{
+  display: flex;
+}
+
+.submenu a{
+  padding: 8px;
+  font-size: 14px;
+  color: #aaa;
+  text-decoration: none;
+  border-radius: 6px;
+}
+
+.submenu a:hover{
+  color: #ffd700;
+  background: rgba(255,255,255,0.05);
+}
+
+</style>
   
 <body>
 
+<!-- TOGGLE BUTTON -->
+<div class="sidebar-toggle" id="sidebar-toggle">☰</div>
+
+<!-- SIDEBAR -->
+<div class="sidebar" id="sidebar">
+
+  <div class="sidebar-header">
+    <span>NIMBO PANEL</span>
+    <span class="sidebar-close" id="sidebar-close">✕</span>
+  </div>
+
+  <div class="menu">
+
+    <div class="menu-item">
+      <a class="menu-title" href="dashboard.html">Dashboard</a>
+    </div>
+
+    <div class="menu-item">
+      <div class="menu-title">Form</div>
+      <div class="submenu">
+        <a href="form.html">Sales Form</a>
+        <a href="formcas.html">Casbon Form</a>
+      </div>
+    </div>
+
+    <div class="menu-item">
+      <div class="menu-title">History</div>
+      <div class="submenu">
+        <a href="salesH.html">Sales History</a>
+        <a href="casbonH.html">Casbon History</a>
+      </div>
+    </div>
+
+    <div class="menu-item">
+      <div class="menu-title">System</div>
+      <div class="submenu">
+        <a href="balance.html">Balance Bank</a>
+        <a href="customerlist.html">Customer Listing</a>
+      </div>
+    </div>
+
+    <div class="menu-item">
+      <div class="menu-title">Website</div>
+      <div class="submenu">
+        <a href="https://tinyurl.com/nimboexch" target="_blank" rel="noopener noreferrer">
+          🌐 Nimbo Exchange
+        </a>
+      </div>
+    </div>
+    
+  </div>
+</div>
+  
 <header class="header-nav">
   <div class="logo">
     <a href="index.html">
@@ -82,6 +241,33 @@
 
 </div>
 
+<script>
+  const sidebar = document.getElementById('sidebar');
+const toggle = document.getElementById('sidebar-toggle');
+const closeBtn = document.getElementById('sidebar-close');
+
+// OPEN
+toggle.addEventListener('click', () => {
+  sidebar.classList.add('active');
+  document.body.classList.add('sidebar-open'); // 🔥 penting
+});
+
+// CLOSE
+closeBtn.addEventListener('click', () => {
+  sidebar.classList.remove('active');
+  document.body.classList.remove('sidebar-open');
+});
+
+// CLICK MENU
+document.querySelectorAll('.menu-title').forEach(el => {
+  el.addEventListener('click', () => {
+    const parent = el.closest('.menu-item');
+    if (parent) parent.classList.toggle('active');
+  });
+});
+
+</script>
+  
 <script src="script.js"></script>
 </body>
 </html>
