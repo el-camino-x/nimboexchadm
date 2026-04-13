@@ -186,7 +186,6 @@ tr:hover td {
   overflow-x: auto;
 }
 
-/* ===== SIDEBAR TOGGLE ===== */
 .sidebar-toggle{
   position: fixed;
   top: 15px;
@@ -203,11 +202,10 @@ body.sidebar-open .sidebar-toggle{
   pointer-events: none;
 }
 
-/* ===== SIDEBAR ===== */
 .sidebar{
   position: fixed;
   top: 0;
-  left: -100%; /* FULL HIDE FIX */
+  left: -100%; 
   width: 280px;
   height: 100vh;
   background: #0b0f14;
@@ -221,7 +219,6 @@ body.sidebar-open .sidebar-toggle{
   left: 0;
 }
 
-/* HEADER */
 .sidebar-header{
   display: flex;
   justify-content: space-between;
@@ -234,7 +231,6 @@ body.sidebar-open .sidebar-toggle{
   text-transform: uppercase;
 }
 
-/* CLOSE BTN */
 .sidebar-close{
   cursor: pointer;
   font-size: 18px;
@@ -247,7 +243,6 @@ body.sidebar-open .sidebar-toggle{
   color: #ffd700;
 }
 
-/* MENU */
 .menu-title{
   padding: 10px;
   margin-top: 10px;
@@ -265,7 +260,6 @@ body.sidebar-open .sidebar-toggle{
   color: #ffd700;
 }
 
-/* SUBMENU */
 .submenu{
   display: none;
   flex-direction: column;
@@ -301,10 +295,8 @@ body.sidebar-open .sidebar-toggle{
 
 <body>
 
-<!-- TOGGLE BUTTON -->
 <div class="sidebar-toggle" id="sidebar-toggle">☰</div>
 
-<!-- SIDEBAR -->
 <div class="sidebar" id="sidebar">
 
   <div class="sidebar-header">
@@ -387,6 +379,19 @@ body.sidebar-open .sidebar-toggle{
       <h3>Casbon</h3>
       <p id="casbon" class="danger">Rp0</p>
     </div>
+
+ <div class="card trx-card">
+  <h3>Total Transaction Today</h3>
+  <p id="trx-today-count" class="trx-count">0 Transaction</p>
+  <p id="trx-today-usd" class="trx-usd">$0</p>
+</div>
+
+<div class="card trx-card">
+  <h3>Total Transaction Yesterday</h3>
+  <p id="trx-yesterday-count" class="trx-count">0 Transaction</p>
+  <p id="trx-yesterday-usd" class="trx-usd">$0</p>
+</div>
+
   </div>
 
   <div class="section-title">👤 Profit Per Orang</div>
@@ -433,110 +438,124 @@ body.sidebar-open .sidebar-toggle{
 </div>
 
 <script>
-
-const API = "https://script.google.com/macros/s/AKfycbzNkMvCxWPe1IzMTPANy79kmPmR3RKVjZvOvsfmXILnuO5JBYAmBQvmBMvcldlR4qJY/exec";
+const API = "https://script.google.com/macros/s/AKfycbziwlyb7JBOoY6jzHKuu5IX5VWSFif-7MGizW9IE2b0HV9U-6kHbSkUCjAef3LPrQrx/exec";
 
 function formatRp(num){
-  return "Rp" + Math.floor(Number(num || 0)).toLocaleString("id-ID");
+  return "Rp" + Number(num || 0).toLocaleString("id-ID");
 }
 
-function formatDate(dateString){
-  if(!dateString) return "-";
-
-  const date = new Date(dateString);
-  if(isNaN(date.getTime())) return "-";
-
-  return date.toLocaleDateString("en-GB", {
-    day: "numeric",
-    month: "short",
-    year: "numeric"
-  });
+function formatUSD(num){
+  return "$" + Number(num || 0).toLocaleString("en-US");
 }
 
 fetch(API)
-.then(r => r.json())
+.then(res => res.json())
 .then(data => {
 
+  console.log("API DATA:", data);
 
-  document.getElementById("assets").innerText = formatRp(data.total_assets);
+  const profitList = data.profit_per_orang || [];
+  const suntikList = data.suntik_dana_list || [];
+  const casbonList = data.casbon_list || [];
 
-const list = data.profit_per_orang || [];
+  document.getElementById("assets").innerText =
+    formatRp(data.total_assets || 0);
 
-const totalProfit =
-  (list[0]?.profit || 0) +
-  (list[1]?.profit || 0);
+  const totalProfit = profitList.reduce((sum, x) => sum + (x.profit || 0), 0);
 
-document.getElementById("profit").innerText = formatRp(totalProfit);
+  document.getElementById("profit").innerText =
+    formatRp(totalProfit);
 
-  document.getElementById("suntik").innerText = formatRp(data.suntik_dana_total);
-  document.getElementById("casbon").innerText = formatRp(data.casbon_total);
+  document.getElementById("suntik").innerText =
+    formatRp(data.suntik_dana_total || 0);
 
+  document.getElementById("casbon").innerText =
+    formatRp(data.casbon_total || 0);
 
+  // ================= PROFIT =================
   const profitBody = document.getElementById("profit-body");
   profitBody.innerHTML = "";
 
-  (data.profit_per_orang || []).forEach(p=>{
-    profitBody.innerHTML += `
-      <tr>
-        <td>${p.nama}</td>
-        <td>${formatRp(p.profit)}</td>
-      </tr>
-    `;
-  });
-
+  if (profitList.length === 0) {
+    profitBody.innerHTML = `<tr><td colspan="2">No Data</td></tr>`;
+  } else {
+    profitList.forEach(p => {
+      profitBody.innerHTML += `
+        <tr>
+          <td>${p.nama}</td>
+          <td>${formatRp(p.profit)}</td>
+        </tr>
+      `;
+    });
+  }
 
   const suntikBody = document.getElementById("suntik-body");
   suntikBody.innerHTML = "";
 
-  (data.suntik_dana_list || []).forEach(s=>{
-    suntikBody.innerHTML += `
-      <tr>
-        <td>${formatDate(s.tanggal)}</td>
-        <td>${s.nama}</td>
-        <td>${formatRp(s.total)}</td>
-      </tr>
-    `;
-  });
-
+  if (suntikList.length === 0) {
+    suntikBody.innerHTML = `<tr><td colspan="3">No Data</td></tr>`;
+  } else {
+    suntikList.forEach(s => {
+      suntikBody.innerHTML += `
+        <tr>
+          <td>${formatDate(s.tanggal)}</td>
+          <td>${s.nama}</td>
+          <td>${formatRp(s.total)}</td>
+        </tr>
+      `;
+    });
+  }
 
   const casbonBody = document.getElementById("casbon-body");
   casbonBody.innerHTML = "";
 
-  (data.casbon_list || []).forEach(c=>{
-    casbonBody.innerHTML += `
-      <tr>
-        <td>${formatDate(c.tanggal)}</td>
-        <td>${c.nama}</td>
-        <td>${formatRp(c.total)}</td>
-      </tr>
-    `;
-  });
+  if (casbonList.length === 0) {
+    casbonBody.innerHTML = `<tr><td colspan="3">No Data</td></tr>`;
+  } else {
+    casbonList.forEach(c => {
+      casbonBody.innerHTML += `
+        <tr>
+          <td>${formatDate(c.tanggal)}</td>
+          <td>${c.nama}</td>
+          <td>${formatRp(c.total)}</td>
+        </tr>
+      `;
+    });
+  }
+
+  const today = data.total_transaction_today || { count:0, usd:0, rp:0 };
+  const yesterday = data.total_transaction_yesterday || { count:0, usd:0, rp:0 };
+
+  document.getElementById("trx-today-count").innerText =
+  `📊 ${today.count} ${today.count === 1 ? "Transaction" : "Transactions"}`;
+
+document.getElementById("trx-today-usd").innerText =
+  `💵 ${formatUSD(today.usd)} | ${formatRp(today.rp)}`;
+
+  document.getElementById("trx-yesterday-count").innerText =
+  `📊 ${yesterday.count} ${yesterday.count === 1 ? "Transaction" : "Transactions"}`;
+
+document.getElementById("trx-yesterday-usd").innerText =
+  `💵 ${formatUSD(yesterday.usd)} | ${formatRp(yesterday.rp)}`;
 
 })
+
 .catch(err => {
   console.error("API ERROR:", err);
 });
 
-const sidebar = document.getElementById('sidebar');
-const toggle = document.getElementById('sidebar-toggle');
-const closeBtn = document.getElementById('sidebar-close');
+function formatDate(date){
+  if(!date) return "-";
 
-toggle.addEventListener('click', () => {
-  sidebar.classList.add('active');
-  document.body.classList.add('sidebar-open');
-});
+  const d = new Date(date);
 
-closeBtn.addEventListener('click', () => {
-  sidebar.classList.remove('active');
-  document.body.classList.remove('sidebar-open');
-});
+  const day = d.getDate();
+  const monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  const month = monthNames[d.getMonth()];
+  const year = d.getFullYear();
 
-document.querySelectorAll('.menu-title').forEach(el => {
-  el.addEventListener('click', () => {
-    const parent = el.closest('.menu-item');
-    if (parent) parent.classList.toggle('active');
-  });
-});
+  return `${day}-${month}-${year}`;
+}
 
 
 </script>
