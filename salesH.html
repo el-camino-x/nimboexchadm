@@ -64,9 +64,8 @@ tbody td:nth-child(4) {
   position: relative;
   z-index: 1;
   max-width: 1200px;
-  margin: 10px auto 50px auto;
-  padding: 0 20px;
-  overflow-x: auto;
+  margin: 20px auto 60px auto;
+  padding: 0 24px; 
 }
 
 h1 {
@@ -163,12 +162,13 @@ h1 {
 
 table {
   width: 100%;
+  max-width: 1050px; 
   border-collapse: collapse;
   background: rgba(255,255,255,0.05);
-  border-radius: 10px;
+  border-radius: 12px;
   overflow: hidden;
-  min-width: 1000px;
 }
+
 th, td {
   padding: 12px 15px;
   border-bottom: 1px solid rgba(255,255,255,0.2);
@@ -262,7 +262,6 @@ body.sidebar-open .sidebar-toggle{
   left: 0;
 }
 
-/* HEADER */
 .sidebar-header{
   display: flex;
   justify-content: space-between;
@@ -328,6 +327,15 @@ body.sidebar-open .sidebar-toggle{
   background: rgba(255,255,255,0.05);
 }
 
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  padding: 0 8px;
+  box-sizing: border-box;
+  margin: 10px auto 0 auto;
+  display: flex;
+  justify-content: center;
+}
   
 </style>
 </head>
@@ -335,7 +343,6 @@ body.sidebar-open .sidebar-toggle{
 
 <div class="sidebar-toggle" id="sidebar-toggle">☰</div>
 
-<!-- SIDEBAR -->
 <div class="sidebar" id="sidebar">
 
   <div class="sidebar-header">
@@ -409,16 +416,14 @@ body.sidebar-open .sidebar-toggle{
 <div class="container">
   <h1>Sales Transaction</h1>
 
-  <!-- FILTER VERTIKAL -->
+
   <div class="filter-group">
 
-    <!-- NAMA -->
     <div class="filter-item">
       <label for="filter-nama">Filter Nama</label>
       <input type="text" id="filter-nama" placeholder="Masukkan nama...">
     </div>
 
-    <!-- AGENT -->
     <div class="filter-row">
       <div class="filter-item">
         <label for="filter-agent">Filter Agent</label>
@@ -428,7 +433,6 @@ body.sidebar-open .sidebar-toggle{
       </div>
     </div>
 
-    <!-- DATE RANGE -->
     <div class="filter-row">
 
       <div class="filter-item">
@@ -443,7 +447,6 @@ body.sidebar-open .sidebar-toggle{
 
     </div>
 
-    <!-- RESET -->
     <div class="filter-item filter-reset">
       <button id="reset-filter">Reset Filter</button>
     </div>
@@ -453,6 +456,8 @@ body.sidebar-open .sidebar-toggle{
 
 
 </div>
+
+  <div class="table-wrapper">
 
   <table>
     <thead>
@@ -471,6 +476,8 @@ body.sidebar-open .sidebar-toggle{
     </thead>
     <tbody id="history-body"></tbody>
 </table>
+  </div>
+
 
 <div id="pagination"></div>
 </div>
@@ -482,9 +489,7 @@ let filteredData = [];
 let currentPage = 1;
 const itemsPerPage = 20;
 
-/* =========================
-   DATE SAFE PARSER (FIX BUG SHIFT + INVALID)
-========================= */
+
 function parseDateOnly(dateStr) {
   if (!dateStr) return null;
 
@@ -498,18 +503,15 @@ function parseDateOnly(dateStr) {
   return `${year}-${month}-${day}`;
 }
 
-/* =========================
-   FETCH DATA
-========================= */
+
 fetch('https://script.google.com/macros/s/AKfycbyMF5FhpYhtFOgVVa_0YWpMkuZj-nWFpaFmqEJCv9VZTWTSnVtQVXyv9W1X4EyP2Wp5/exec')
   .then(res => res.json())
   .then(data => {
 
-    console.log("RAW DATA:", data); // debug penting
+    console.log("RAW DATA:", data); 
 
     allData = data || [];
 
-    // SORT DESC BY DATE
     allData.sort((a, b) => {
       const A = parseDateOnly(a.tanggal) || "0000-00-00";
       const B = parseDateOnly(b.tanggal) || "0000-00-00";
@@ -525,9 +527,7 @@ fetch('https://script.google.com/macros/s/AKfycbyMF5FhpYhtFOgVVa_0YWpMkuZj-nWFpa
   })
   .catch(err => console.error('FETCH ERROR:', err));
 
-/* =========================
-   RENDER TABLE
-========================= */
+
 function renderTable(data) {
   const tbody = document.getElementById('history-body');
   tbody.innerHTML = '';
@@ -548,7 +548,6 @@ function renderTable(data) {
       ? '-'
       : jam.toLocaleTimeString('en-GB', { hour12: false });
 
-    /* ⚠️ FORMAT INI TETAP (JANGAN DIUBAH) */
     let rateFormatted = (item.rate / 1000).toFixed(3);
     let dollarFormatted = `$${item.dollar}`;
     let totalFormatted = Number(item.total).toLocaleString('id-ID');
@@ -573,9 +572,7 @@ function renderTable(data) {
   });
 }
 
-/* =========================
-   AGENT DROPDOWN
-========================= */
+
 function populateAgentDropdown() {
   const agentSelect = document.getElementById('filter-agent');
   agentSelect.innerHTML = `<option value="">All Agent</option>`;
@@ -590,9 +587,7 @@ function populateAgentDropdown() {
   });
 }
 
-/* =========================
-   FILTER (NAMA + AGENT + DATE RANGE)
-========================= */
+
 document.getElementById('filter-nama').addEventListener('input', filterData);
 document.getElementById('filter-agent').addEventListener('change', filterData);
 document.getElementById('filter-start').addEventListener('change', filterData);
@@ -626,9 +621,7 @@ function filterData() {
   render();
 }
 
-/* =========================
-   RESET
-========================= */
+
 document.getElementById('reset-filter').addEventListener('click', () => {
   document.getElementById('filter-nama').value = '';
   document.getElementById('filter-agent').value = '';
@@ -640,9 +633,7 @@ document.getElementById('reset-filter').addEventListener('click', () => {
   render();
 });
 
-/* =========================
-   RENDER + PAGINATION
-========================= */
+
 function render() {
   const start = (currentPage - 1) * itemsPerPage;
   const end = start + itemsPerPage;
@@ -687,9 +678,7 @@ function goToPage(page) {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-/* =========================
-   SIDEBAR (FULL FIX)
-========================= */
+
 const sidebar = document.getElementById('sidebar');
 const toggle = document.getElementById('sidebar-toggle');
 const closeBtn = document.getElementById('sidebar-close');
