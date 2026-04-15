@@ -412,28 +412,45 @@ body.sidebar-open .sidebar-toggle{
   <!-- FILTER VERTIKAL -->
   <div class="filter-group">
 
-  <div class="filter-item">
-    <label for="filter-nama">Filter Nama</label>
-    <input type="text" id="filter-nama" placeholder="Masukkan nama...">
-  </div>
-
-  <div class="filter-row">
+    <!-- NAMA -->
     <div class="filter-item">
-      <label for="filter-agent">Filter Agent</label>
-      <select id="filter-agent">
-        <option value="">All Agent</option>
-      </select>
+      <label for="filter-nama">Filter Nama</label>
+      <input type="text" id="filter-nama" placeholder="Masukkan nama...">
     </div>
 
-    <div class="filter-item">
-      <label for="filter-tanggal">Filter Tanggal</label>
-      <input type="date" id="filter-tanggal">
+    <!-- AGENT -->
+    <div class="filter-row">
+      <div class="filter-item">
+        <label for="filter-agent">Filter Agent</label>
+        <select id="filter-agent">
+          <option value="">All Agent</option>
+        </select>
+      </div>
     </div>
+
+    <!-- DATE RANGE -->
+    <div class="filter-row">
+
+      <div class="filter-item">
+        <label for="filter-start">Start Date</label>
+        <input type="date" id="filter-start">
+      </div>
+
+      <div class="filter-item">
+        <label for="filter-end">End Date</label>
+        <input type="date" id="filter-end">
+      </div>
+
+    </div>
+
+    <!-- RESET -->
+    <div class="filter-item filter-reset">
+      <button id="reset-filter">Reset Filter</button>
+    </div>
+
   </div>
 
-  <div class="filter-item filter-reset">
-    <button id="reset-filter">Reset Filter</button>
-  </div>
+
 
 </div>
 
@@ -465,8 +482,12 @@ let filteredData = [];
 let currentPage = 1;
 const itemsPerPage = 20;
 
-
+/* =========================
+   DATE SAFE PARSER (FIX BUG SHIFT + INVALID)
+========================= */
 function parseDateOnly(dateStr) {
+  if (!dateStr) return null;
+
   const d = new Date(dateStr);
   if (isNaN(d.getTime())) return null;
 
@@ -477,28 +498,36 @@ function parseDateOnly(dateStr) {
   return `${year}-${month}-${day}`;
 }
 
-
+/* =========================
+   FETCH DATA
+========================= */
 fetch('https://script.google.com/macros/s/AKfycbyMF5FhpYhtFOgVVa_0YWpMkuZj-nWFpaFmqEJCv9VZTWTSnVtQVXyv9W1X4EyP2Wp5/exec')
   .then(res => res.json())
   .then(data => {
 
-    allData = data;
+    console.log("RAW DATA:", data); // debug penting
 
+    allData = data || [];
+
+    // SORT DESC BY DATE
     allData.sort((a, b) => {
-      const dateA = parseDateOnly(a.tanggal);
-      const dateB = parseDateOnly(b.tanggal);
-      return dateB.localeCompare(dateA);
+      const A = parseDateOnly(a.tanggal) || "0000-00-00";
+      const B = parseDateOnly(b.tanggal) || "0000-00-00";
+      return B.localeCompare(A);
     });
 
     populateAgentDropdown();
 
     filteredData = allData;
     currentPage = 1;
+
     render();
   })
-  .catch(err => console.error('Error fetch history:', err));
+  .catch(err => console.error('FETCH ERROR:', err));
 
-
+/* =========================
+   RENDER TABLE
+========================= */
 function renderTable(data) {
   const tbody = document.getElementById('history-body');
   tbody.innerHTML = '';
@@ -519,6 +548,7 @@ function renderTable(data) {
       ? '-'
       : jam.toLocaleTimeString('en-GB', { hour12: false });
 
+    /* ⚠️ FORMAT INI TETAP (JANGAN DIUBAH) */
     let rateFormatted = (item.rate / 1000).toFixed(3);
     let dollarFormatted = `$${item.dollar}`;
     let totalFormatted = Number(item.total).toLocaleString('id-ID');
@@ -543,9 +573,13 @@ function renderTable(data) {
   });
 }
 
-
+/* =========================
+   AGENT DROPDOWN
+========================= */
 function populateAgentDropdown() {
   const agentSelect = document.getElementById('filter-agent');
+  agentSelect.innerHTML = `<option value="">All Agent</option>`;
+
   const agents = [...new Set(allData.map(item => item.agent))];
 
   agents.forEach(agent => {
@@ -556,45 +590,59 @@ function populateAgentDropdown() {
   });
 }
 
-
+/* =========================
+   FILTER (NAMA + AGENT + DATE RANGE)
+========================= */
 document.getElementById('filter-nama').addEventListener('input', filterData);
 document.getElementById('filter-agent').addEventListener('change', filterData);
-document.getElementById('filter-tanggal').addEventListener('change', filterData);
+document.getElementById('filter-start').addEventListener('change', filterData);
+document.getElementById('filter-end').addEventListener('change', filterData);
 
 function filterData() {
 
   const namaVal = document.getElementById('filter-nama').value.toLowerCase();
   const agentVal = document.getElementById('filter-agent').value.toLowerCase();
-  const tanggalVal = document.getElementById('filter-tanggal').value;
+  const startVal = document.getElementById('filter-start').value;
+  const endVal = document.getElementById('filter-end').value;
 
-  const filtered = allData.filter(item => {
+  filteredData = allData.filter(item => {
 
-    let tanggalISO = parseDateOnly(item.tanggal);
+    const tanggalISO = parseDateOnly(item.tanggal);
 
-    return (
-      item.nama.toLowerCase().includes(namaVal) &&
-      item.agent.toLowerCase().includes(agentVal) &&
-      (tanggalVal === '' || tanggalISO === tanggalVal)
-    );
+    if (!tanggalISO) return false;
+
+    const matchNama = item.nama.toLowerCase().includes(namaVal);
+    const matchAgent = item.agent.toLowerCase().includes(agentVal);
+
+    let matchDate = true;
+
+    if (startVal && tanggalISO < startVal) matchDate = false;
+    if (endVal && tanggalISO > endVal) matchDate = false;
+
+    return matchNama && matchAgent && matchDate;
   });
 
-  filteredData = filtered;
   currentPage = 1;
   render();
 }
 
-
+/* =========================
+   RESET
+========================= */
 document.getElementById('reset-filter').addEventListener('click', () => {
   document.getElementById('filter-nama').value = '';
   document.getElementById('filter-agent').value = '';
-  document.getElementById('filter-tanggal').value = '';
+  document.getElementById('filter-start').value = '';
+  document.getElementById('filter-end').value = '';
 
   filteredData = allData;
   currentPage = 1;
   render();
 });
 
-
+/* =========================
+   RENDER + PAGINATION
+========================= */
 function render() {
   const start = (currentPage - 1) * itemsPerPage;
   const end = start + itemsPerPage;
@@ -617,21 +665,13 @@ function renderPagination() {
 
   container.innerHTML = `
     <div style="display:flex;gap:10px;justify-content:center;align-items:center;margin:20px 0;">
-
-      <button onclick="goToPage(${currentPage - 1})"
-        ${currentPage === 1 ? "disabled" : ""}>
-        ◀ Prev
-      </button>
+      <button onclick="goToPage(${currentPage - 1})" ${currentPage === 1 ? "disabled" : ""}>◀ Prev</button>
 
       <div style="padding:6px 12px;background:rgba(255,255,255,0.1);border-radius:8px;">
         Page ${currentPage} / ${totalPages}
       </div>
 
-      <button onclick="goToPage(${currentPage + 1})"
-        ${currentPage === totalPages ? "disabled" : ""}>
-        Next ▶
-      </button>
-
+      <button onclick="goToPage(${currentPage + 1})" ${currentPage === totalPages ? "disabled" : ""}>Next ▶</button>
     </div>
   `;
 }
@@ -644,13 +684,12 @@ function goToPage(page) {
   currentPage = page;
   render();
 
-  window.scrollTo({
-    top: 0,
-    behavior: 'smooth'
-  });
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-
+/* =========================
+   SIDEBAR (FULL FIX)
+========================= */
 const sidebar = document.getElementById('sidebar');
 const toggle = document.getElementById('sidebar-toggle');
 const closeBtn = document.getElementById('sidebar-close');
