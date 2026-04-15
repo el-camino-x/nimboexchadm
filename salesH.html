@@ -465,22 +465,41 @@ let filteredData = [];
 let currentPage = 1;
 const itemsPerPage = 20;
 
+
+function parseDateOnly(dateStr) {
+  const d = new Date(dateStr);
+  if (isNaN(d.getTime())) return null;
+
+  const year = d.getFullYear();
+  const month = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+
+  return `${year}-${month}-${day}`;
+}
+
+
 fetch('https://script.google.com/macros/s/AKfycbyMF5FhpYhtFOgVVa_0YWpMkuZj-nWFpaFmqEJCv9VZTWTSnVtQVXyv9W1X4EyP2Wp5/exec')
   .then(res => res.json())
   .then(data => {
+
     allData = data;
 
-allData.sort((a, b) => new Date(b.tanggal) - new Date(a.tanggal));
+    allData.sort((a, b) => {
+      const dateA = parseDateOnly(a.tanggal);
+      const dateB = parseDateOnly(b.tanggal);
+      return dateB.localeCompare(dateA);
+    });
 
-populateAgentDropdown();
+    populateAgentDropdown();
 
-filteredData = allData;
-currentPage = 1;
-render();
+    filteredData = allData;
+    currentPage = 1;
+    render();
   })
   .catch(err => console.error('Error fetch history:', err));
 
-  function renderTable(data) {
+
+function renderTable(data) {
   const tbody = document.getElementById('history-body');
   tbody.innerHTML = '';
 
@@ -490,6 +509,7 @@ render();
 
     let tanggal = new Date(item.tanggal);
     let options = { day: 'numeric', month: 'short', year: 'numeric' };
+
     let tanggalFormatted = isNaN(tanggal.getTime())
       ? '-'
       : tanggal.toLocaleDateString('en-GB', options).replace(/ /g, ' ');
@@ -523,9 +543,11 @@ render();
   });
 }
 
+
 function populateAgentDropdown() {
   const agentSelect = document.getElementById('filter-agent');
   const agents = [...new Set(allData.map(item => item.agent))];
+
   agents.forEach(agent => {
     const option = document.createElement('option');
     option.value = agent.toLowerCase();
@@ -534,18 +556,20 @@ function populateAgentDropdown() {
   });
 }
 
+
 document.getElementById('filter-nama').addEventListener('input', filterData);
 document.getElementById('filter-agent').addEventListener('change', filterData);
 document.getElementById('filter-tanggal').addEventListener('change', filterData);
 
 function filterData() {
+
   const namaVal = document.getElementById('filter-nama').value.toLowerCase();
   const agentVal = document.getElementById('filter-agent').value.toLowerCase();
-  const tanggalVal = document.getElementById('filter-tanggal').value; 
+  const tanggalVal = document.getElementById('filter-tanggal').value;
 
   const filtered = allData.filter(item => {
-    let tanggal = new Date(item.tanggal);
-    let tanggalISO = isNaN(tanggal.getTime()) ? '' : tanggal.toISOString().slice(0,10); 
+
+    let tanggalISO = parseDateOnly(item.tanggal);
 
     return (
       item.nama.toLowerCase().includes(namaVal) &&
@@ -555,18 +579,21 @@ function filterData() {
   });
 
   filteredData = filtered;
-currentPage = 1;
-render();
+  currentPage = 1;
+  render();
 }
+
 
 document.getElementById('reset-filter').addEventListener('click', () => {
   document.getElementById('filter-nama').value = '';
   document.getElementById('filter-agent').value = '';
   document.getElementById('filter-tanggal').value = '';
+
   filteredData = allData;
-currentPage = 1;
-render();
+  currentPage = 1;
+  render();
 });
+
 
 function render() {
   const start = (currentPage - 1) * itemsPerPage;
@@ -623,14 +650,6 @@ function goToPage(page) {
   });
 }
 
-function goToPage(page) {
-  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
-
-  if (page < 1 || page > totalPages) return;
-
-  currentPage = page;
-  render();
-}
 
 const sidebar = document.getElementById('sidebar');
 const toggle = document.getElementById('sidebar-toggle');
@@ -638,7 +657,7 @@ const closeBtn = document.getElementById('sidebar-close');
 
 toggle.addEventListener('click', () => {
   sidebar.classList.add('active');
-  document.body.classList.add('sidebar-open'); 
+  document.body.classList.add('sidebar-open');
 });
 
 closeBtn.addEventListener('click', () => {
@@ -652,11 +671,7 @@ document.querySelectorAll('.menu-title').forEach(el => {
     if (parent) parent.classList.toggle('active');
   });
 });
-
-
 </script>
 
 </body>
 </html>
-
-
