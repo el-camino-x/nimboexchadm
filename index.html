@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -291,6 +292,17 @@ body.sidebar-open .sidebar-toggle{
   padding-left: 10px;
 }
 
+.blink-red {
+  color: #ff4d4d !important;
+  animation: blinkAnim 0.8s infinite;
+}
+
+@keyframes blinkAnim {
+  0% { opacity: 1; }
+  50% { opacity: 0.2; }
+  100% { opacity: 1; }
+}
+
 </style>
 </head>
 
@@ -405,6 +417,17 @@ body.sidebar-open .sidebar-toggle{
   <p id="trx-yesterday-usd" class="trx-usd">$0</p>
 </div>
 
+<div class="card">
+  <h3>Pending Sales Form</h3>
+  <p id="pending-sales-value">0 Form | $0</p>
+</div>
+
+<div class="card">
+  <h3>Pending Casbon Form</h3>
+  <p id="pending-casbon-value">0 Form | $0</p>
+</div>
+
+
 <br>
 
 
@@ -458,7 +481,7 @@ body.sidebar-open .sidebar-toggle{
 </div>
 
 <script>
-const API = "https://script.google.com/macros/s/AKfycbx12n2cWsamI4_k04mVi_EUgar06jXxVvrJ6Rv4S_xeUI_qKjHE0aol5s2k-drkw_00/exec";
+const API = "https://script.google.com/macros/s/AKfycbwqzlSqScF82y0NGOgSgMvnw1hhgzpagb0Uh4VzJXpVe6kwUaeJdEONagIUE7p55Tce/exec";
 
 function formatRp(num){
   return "Rp" + Number(num || 0).toLocaleString("id-ID");
@@ -545,6 +568,7 @@ fetch(API)
   const today = data.total_transaction_today || { count:0, usd:0, rp:0 };
   const yesterday = data.total_transaction_yesterday || { count:0, usd:0, rp:0 };
 
+
   document.getElementById("trx-today-count").innerText =
   `📊 ${today.count} ${today.count === 1 ? "Transaction" : "Transactions"}`;
 
@@ -556,6 +580,46 @@ document.getElementById("trx-today-usd").innerText =
 
 document.getElementById("trx-yesterday-usd").innerText =
   `💵 ${formatUSD(yesterday.usd)} | ${formatRp(yesterday.rp)}`;
+
+const num = (v) => Number(v || 0);
+
+const salesCount = num(data.pending_sales_count);
+const salesUsd = num(data.pending_sales_usd);
+
+const salesEl = document.getElementById("pending-sales-value");
+
+const salesIcon = salesCount > 5 ? "🚨" : "📋";
+
+salesEl.innerText =
+  `${salesIcon} ${salesCount} ${salesCount === 1 ? "Form" : "Forms"} | $${salesUsd.toLocaleString("en-US")}`;
+
+salesEl.classList.remove("blink-red");
+
+if (salesCount > 5) {
+  salesEl.classList.add("blink-red");
+} else {
+  salesEl.style.color = salesCount > 0 ? "#ff4d4d" : "#00ff9c";
+}
+
+
+
+const casbonCount = num(data.pending_casbon_count);
+const casbonUsd = num(data.pending_casbon_usd);
+
+const casbonEl = document.getElementById("pending-casbon-value");
+
+const casbonIcon = casbonCount > 5 ? "🚨" : "📋";
+
+casbonEl.innerText =
+  `${casbonIcon} ${casbonCount} ${casbonCount === 1 ? "Form" : "Forms"} | $${casbonUsd.toLocaleString("en-US")}`;
+
+casbonEl.classList.remove("blink-red");
+
+if (casbonCount > 5) {
+  casbonEl.classList.add("blink-red");
+} else {
+  casbonEl.style.color = casbonCount > 0 ? "#ff4d4d" : "#00ff9c";
+}
 
 })
 
